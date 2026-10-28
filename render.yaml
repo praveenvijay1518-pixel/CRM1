@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ipc-iq-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd backend && python app.py
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      # The database lives on the free tier's temporary disk, so it resets to the
+      # synthetic demo data whenever the service restarts. Do not add an
+      # ANTHROPIC_API_KEY here: the site has no login, so anyone could use it.

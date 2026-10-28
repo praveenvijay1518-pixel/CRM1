@@ -1,0 +1,2948 @@
+[
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2025-11",
+  "data": {
+   "month": "2025-11",
+   "days": 30,
+   "wards": {
+    "micu": {
+     "patientDays": 626,
+     "ucDays": 284,
+     "clDays": 276,
+     "ventDays": 177,
+     "cauti": 1,
+     "clabsi": 1,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 197,
+     "hhCompliant": 168,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 2
+     },
+     "rxReviewed": 27,
+     "rxAppropriate": 23
+    },
+    "sicu": {
+     "patientDays": 496,
+     "ucDays": 230,
+     "clDays": 206,
+     "ventDays": 187,
+     "cauti": 1,
+     "clabsi": 0,
+     "vap": 2,
+     "procedures": 36,
+     "ssi": 1,
+     "nsi": 0,
+     "hhOpp": 249,
+     "hhCompliant": 209,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 0
+     },
+     "rxReviewed": 29,
+     "rxAppropriate": 23
+    },
+    "nicu": {
+     "patientDays": 698,
+     "ucDays": 35,
+     "clDays": 301,
+     "ventDays": 202,
+     "cauti": 0,
+     "clabsi": 2,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 259,
+     "hhCompliant": 228,
+     "mdro": {
+      "CRE": 3,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 3,
+      "CRAB": 0
+     },
+     "rxReviewed": 35,
+     "rxAppropriate": 26
+    },
+    "med": {
+     "patientDays": 1634,
+     "ucDays": 256,
+     "clDays": 103,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 167,
+     "hhCompliant": 126,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 0,
+      "VRE": 1,
+      "ESBL": 0,
+      "CRAB": 0
+     },
+     "rxReviewed": 27,
+     "rxAppropriate": 21
+    },
+    "surg": {
+     "patientDays": 1336,
+     "ucDays": 205,
+     "clDays": 71,
+     "ventDays": 0,
+     "cauti": 1,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 208,
+     "ssi": 1,
+     "nsi": 1,
+     "hhOpp": 163,
+     "hhCompliant": 140,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 3,
+      "CRAB": 0
+     },
+     "rxReviewed": 39,
+     "rxAppropriate": 32
+    },
+    "onco": {
+     "patientDays": 888,
+     "ucDays": 152,
+     "clDays": 71,
+     "ventDays": 0,
+     "cauti": 1,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 120,
+     "hhCompliant": 100,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 0,
+      "VRE": 2,
+      "ESBL": 1,
+      "CRAB": 2
+     },
+     "rxReviewed": 32,
+     "rxAppropriate": 22
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 318,
+     "dot": 277
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 389,
+     "dot": 358
+    },
+    "Ceftriaxone": {
+     "ddd": 616,
+     "dot": 496
+    },
+    "Vancomycin": {
+     "ddd": 172,
+     "dot": 148
+    },
+    "Colistin": {
+     "ddd": 52,
+     "dot": 60
+    },
+    "Amikacin": {
+     "ddd": 146,
+     "dot": 141
+    },
+    "Linezolid": {
+     "ddd": 72,
+     "dot": 77
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 23
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 40
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2025-12",
+  "data": {
+   "month": "2025-12",
+   "days": 31,
+   "wards": {
+    "micu": {
+     "patientDays": 604,
+     "ucDays": 302,
+     "clDays": 295,
+     "ventDays": 172,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 2,
+     "hhOpp": 199,
+     "hhCompliant": 169,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 2,
+      "VRE": 1,
+      "ESBL": 1,
+      "CRAB": 1
+     },
+     "rxReviewed": 32,
+     "rxAppropriate": 26
+    },
+    "sicu": {
+     "patientDays": 542,
+     "ucDays": 324,
+     "clDays": 225,
+     "ventDays": 168,
+     "cauti": 1,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 37,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 202,
+     "hhCompliant": 167,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 2,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 3
+     },
+     "rxReviewed": 32,
+     "rxAppropriate": 23
+    },
+    "nicu": {
+     "patientDays": 726,
+     "ucDays": 36,
+     "clDays": 332,
+     "ventDays": 289,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 2,
+     "hhOpp": 237,
+     "hhCompliant": 216,
+     "mdro": {
+      "CRE": 3,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 4,
+      "CRAB": 0
+     },
+     "rxReviewed": 34,
+     "rxAppropriate": 27
+    },
+    "med": {
+     "patientDays": 1512,
+     "ucDays": 196,
+     "clDays": 143,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 167,
+     "hhCompliant": 133,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 0
+     },
+     "rxReviewed": 29,
+     "rxAppropriate": 21
+    },
+    "surg": {
+     "patientDays": 1372,
+     "ucDays": 173,
+     "clDays": 100,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 2,
+     "vap": 0,
+     "procedures": 171,
+     "ssi": 4,
+     "nsi": 1,
+     "hhOpp": 169,
+     "hhCompliant": 151,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 0
+     },
+     "rxReviewed": 27,
+     "rxAppropriate": 21
+    },
+    "onco": {
+     "patientDays": 913,
+     "ucDays": 154,
+     "clDays": 78,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 159,
+     "hhCompliant": 127,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 0,
+      "CRAB": 0
+     },
+     "rxReviewed": 35,
+     "rxAppropriate": 25
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 330,
+     "dot": 282
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 414,
+     "dot": 325
+    },
+    "Ceftriaxone": {
+     "ddd": 558,
+     "dot": 560
+    },
+    "Vancomycin": {
+     "ddd": 173,
+     "dot": 151
+    },
+    "Colistin": {
+     "ddd": 62,
+     "dot": 65
+    },
+    "Amikacin": {
+     "ddd": 130,
+     "dot": 139
+    },
+    "Linezolid": {
+     "ddd": 72,
+     "dot": 76
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 21
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 40
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-01",
+  "data": {
+   "month": "2026-01",
+   "days": 31,
+   "wards": {
+    "micu": {
+     "patientDays": 662,
+     "ucDays": 386,
+     "clDays": 305,
+     "ventDays": 227,
+     "cauti": 5,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 2,
+     "hhOpp": 245,
+     "hhCompliant": 210,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 2,
+      "VRE": 1,
+      "ESBL": 3,
+      "CRAB": 0
+     },
+     "rxReviewed": 30,
+     "rxAppropriate": 25
+    },
+    "sicu": {
+     "patientDays": 568,
+     "ucDays": 279,
+     "clDays": 282,
+     "ventDays": 176,
+     "cauti": 1,
+     "clabsi": 1,
+     "vap": 1,
+     "procedures": 37,
+     "ssi": 1,
+     "nsi": 0,
+     "hhOpp": 215,
+     "hhCompliant": 190,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 3,
+      "CRAB": 2
+     },
+     "rxReviewed": 36,
+     "rxAppropriate": 29
+    },
+    "nicu": {
+     "patientDays": 721,
+     "ucDays": 36,
+     "clDays": 360,
+     "ventDays": 216,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 213,
+     "hhCompliant": 188,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 2,
+      "VRE": 1,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 31,
+     "rxAppropriate": 24
+    },
+    "med": {
+     "patientDays": 1621,
+     "ucDays": 255,
+     "clDays": 117,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 2,
+     "hhOpp": 127,
+     "hhCompliant": 101,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 1,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 29,
+     "rxAppropriate": 22
+    },
+    "surg": {
+     "patientDays": 1393,
+     "ucDays": 175,
+     "clDays": 99,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 198,
+     "ssi": 3,
+     "nsi": 1,
+     "hhOpp": 129,
+     "hhCompliant": 109,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 5,
+      "CRAB": 2
+     },
+     "rxReviewed": 36,
+     "rxAppropriate": 28
+    },
+    "onco": {
+     "patientDays": 1000,
+     "ucDays": 164,
+     "clDays": 95,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 140,
+     "hhCompliant": 113,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 0
+     },
+     "rxReviewed": 29,
+     "rxAppropriate": 21
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 336,
+     "dot": 281
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 397,
+     "dot": 374
+    },
+    "Ceftriaxone": {
+     "ddd": 635,
+     "dot": 475
+    },
+    "Vancomycin": {
+     "ddd": 157,
+     "dot": 151
+    },
+    "Colistin": {
+     "ddd": 61,
+     "dot": 63
+    },
+    "Amikacin": {
+     "ddd": 138,
+     "dot": 162
+    },
+    "Linezolid": {
+     "ddd": 76,
+     "dot": 73
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 22
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 36
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-02",
+  "data": {
+   "month": "2026-02",
+   "days": 28,
+   "wards": {
+    "micu": {
+     "patientDays": 594,
+     "ucDays": 316,
+     "clDays": 291,
+     "ventDays": 168,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 234,
+     "hhCompliant": 198,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 1
+     },
+     "rxReviewed": 32,
+     "rxAppropriate": 22
+    },
+    "sicu": {
+     "patientDays": 467,
+     "ucDays": 225,
+     "clDays": 210,
+     "ventDays": 170,
+     "cauti": 1,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 34,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 223,
+     "hhCompliant": 189,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 3,
+      "VRE": 0,
+      "ESBL": 0,
+      "CRAB": 0
+     },
+     "rxReviewed": 27,
+     "rxAppropriate": 21
+    },
+    "nicu": {
+     "patientDays": 673,
+     "ucDays": 34,
+     "clDays": 340,
+     "ventDays": 246,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 2,
+     "hhOpp": 182,
+     "hhCompliant": 161,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 2
+     },
+     "rxReviewed": 40,
+     "rxAppropriate": 33
+    },
+    "med": {
+     "patientDays": 1392,
+     "ucDays": 215,
+     "clDays": 95,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 2,
+     "hhOpp": 197,
+     "hhCompliant": 161,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 3,
+      "CRAB": 0
+     },
+     "rxReviewed": 32,
+     "rxAppropriate": 26
+    },
+    "surg": {
+     "patientDays": 1145,
+     "ucDays": 215,
+     "clDays": 105,
+     "ventDays": 0,
+     "cauti": 1,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 166,
+     "ssi": 2,
+     "nsi": 1,
+     "hhOpp": 137,
+     "hhCompliant": 119,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 0,
+      "VRE": 1,
+      "ESBL": 4,
+      "CRAB": 0
+     },
+     "rxReviewed": 37,
+     "rxAppropriate": 26
+    },
+    "onco": {
+     "patientDays": 818,
+     "ucDays": 143,
+     "clDays": 53,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 154,
+     "hhCompliant": 120,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 0,
+      "CRAB": 0
+     },
+     "rxReviewed": 27,
+     "rxAppropriate": 21
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 356,
+     "dot": 293
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 396,
+     "dot": 359
+    },
+    "Ceftriaxone": {
+     "ddd": 637,
+     "dot": 570
+    },
+    "Vancomycin": {
+     "ddd": 161,
+     "dot": 143
+    },
+    "Colistin": {
+     "ddd": 60,
+     "dot": 66
+    },
+    "Amikacin": {
+     "ddd": 132,
+     "dot": 140
+    },
+    "Linezolid": {
+     "ddd": 68,
+     "dot": 70
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 24
+    },
+    "water": {
+     "tested": 12,
+     "passed": 11
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 39
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-03",
+  "data": {
+   "month": "2026-03",
+   "days": 31,
+   "wards": {
+    "micu": {
+     "patientDays": 671,
+     "ucDays": 351,
+     "clDays": 356,
+     "ventDays": 226,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 255,
+     "hhCompliant": 208,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 3,
+      "CRAB": 2
+     },
+     "rxReviewed": 28,
+     "rxAppropriate": 22
+    },
+    "sicu": {
+     "patientDays": 523,
+     "ucDays": 270,
+     "clDays": 277,
+     "ventDays": 208,
+     "cauti": 1,
+     "clabsi": 0,
+     "vap": 2,
+     "procedures": 37,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 193,
+     "hhCompliant": 163,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 3,
+      "CRAB": 2
+     },
+     "rxReviewed": 35,
+     "rxAppropriate": 29
+    },
+    "nicu": {
+     "patientDays": 773,
+     "ucDays": 39,
+     "clDays": 386,
+     "ventDays": 302,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 3,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 205,
+     "hhCompliant": 184,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 4,
+      "CRAB": 0
+     },
+     "rxReviewed": 31,
+     "rxAppropriate": 23
+    },
+    "med": {
+     "patientDays": 1516,
+     "ucDays": 193,
+     "clDays": 149,
+     "ventDays": 0,
+     "cauti": 2,
+     "clabsi": 1,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 123,
+     "hhCompliant": 92,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 2,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 30,
+     "rxAppropriate": 24
+    },
+    "surg": {
+     "patientDays": 1395,
+     "ucDays": 204,
+     "clDays": 118,
+     "ventDays": 0,
+     "cauti": 2,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 183,
+     "ssi": 4,
+     "nsi": 2,
+     "hhOpp": 153,
+     "hhCompliant": 133,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 3,
+      "CRAB": 1
+     },
+     "rxReviewed": 29,
+     "rxAppropriate": 21
+    },
+    "onco": {
+     "patientDays": 957,
+     "ucDays": 157,
+     "clDays": 52,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 2,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 177,
+     "hhCompliant": 145,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 0,
+      "VRE": 2,
+      "ESBL": 3,
+      "CRAB": 1
+     },
+     "rxReviewed": 29,
+     "rxAppropriate": 24
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 357,
+     "dot": 327
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 421,
+     "dot": 383
+    },
+    "Ceftriaxone": {
+     "ddd": 584,
+     "dot": 499
+    },
+    "Vancomycin": {
+     "ddd": 163,
+     "dot": 165
+    },
+    "Colistin": {
+     "ddd": 68,
+     "dot": 69
+    },
+    "Amikacin": {
+     "ddd": 141,
+     "dot": 145
+    },
+    "Linezolid": {
+     "ddd": 76,
+     "dot": 71
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 23
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 38
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-04",
+  "data": {
+   "month": "2026-04",
+   "days": 30,
+   "wards": {
+    "micu": {
+     "patientDays": 640,
+     "ucDays": 292,
+     "clDays": 327,
+     "ventDays": 228,
+     "cauti": 1,
+     "clabsi": 1,
+     "vap": 2,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 227,
+     "hhCompliant": 203,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 1
+     },
+     "rxReviewed": 35,
+     "rxAppropriate": 28
+    },
+    "sicu": {
+     "patientDays": 540,
+     "ucDays": 312,
+     "clDays": 286,
+     "ventDays": 166,
+     "cauti": 2,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 36,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 254,
+     "hhCompliant": 204,
+     "mdro": {
+      "CRE": 3,
+      "MRSA": 2,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 1
+     },
+     "rxReviewed": 31,
+     "rxAppropriate": 22
+    },
+    "nicu": {
+     "patientDays": 718,
+     "ucDays": 36,
+     "clDays": 373,
+     "ventDays": 198,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 217,
+     "hhCompliant": 195,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 3,
+      "VRE": 0,
+      "ESBL": 4,
+      "CRAB": 1
+     },
+     "rxReviewed": 31,
+     "rxAppropriate": 24
+    },
+    "med": {
+     "patientDays": 1464,
+     "ucDays": 243,
+     "clDays": 115,
+     "ventDays": 0,
+     "cauti": 2,
+     "clabsi": 1,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 175,
+     "hhCompliant": 140,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 1,
+      "ESBL": 3,
+      "CRAB": 0
+     },
+     "rxReviewed": 35,
+     "rxAppropriate": 28
+    },
+    "surg": {
+     "patientDays": 1308,
+     "ucDays": 245,
+     "clDays": 106,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 1,
+     "vap": 0,
+     "procedures": 176,
+     "ssi": 2,
+     "nsi": 0,
+     "hhOpp": 180,
+     "hhCompliant": 156,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 2,
+      "ESBL": 4,
+      "CRAB": 0
+     },
+     "rxReviewed": 39,
+     "rxAppropriate": 27
+    },
+    "onco": {
+     "patientDays": 989,
+     "ucDays": 187,
+     "clDays": 85,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 2,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 163,
+     "hhCompliant": 132,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 25,
+     "rxAppropriate": 21
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 374,
+     "dot": 337
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 397,
+     "dot": 329
+    },
+    "Ceftriaxone": {
+     "ddd": 650,
+     "dot": 563
+    },
+    "Vancomycin": {
+     "ddd": 154,
+     "dot": 147
+    },
+    "Colistin": {
+     "ddd": 66,
+     "dot": 85
+    },
+    "Amikacin": {
+     "ddd": 135,
+     "dot": 150
+    },
+    "Linezolid": {
+     "ddd": 69,
+     "dot": 75
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 24
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 35
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-05",
+  "data": {
+   "month": "2026-05",
+   "days": 31,
+   "wards": {
+    "micu": {
+     "patientDays": 624,
+     "ucDays": 290,
+     "clDays": 295,
+     "ventDays": 194,
+     "cauti": 0,
+     "clabsi": 1,
+     "vap": 2,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 235,
+     "hhCompliant": 187,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 5,
+      "CRAB": 1
+     },
+     "rxReviewed": 27,
+     "rxAppropriate": 21
+    },
+    "sicu": {
+     "patientDays": 490,
+     "ucDays": 277,
+     "clDays": 211,
+     "ventDays": 138,
+     "cauti": 0,
+     "clabsi": 1,
+     "vap": 1,
+     "procedures": 37,
+     "ssi": 1,
+     "nsi": 0,
+     "hhOpp": 200,
+     "hhCompliant": 164,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 3,
+      "CRAB": 0
+     },
+     "rxReviewed": 36,
+     "rxAppropriate": 28
+    },
+    "nicu": {
+     "patientDays": 768,
+     "ucDays": 38,
+     "clDays": 397,
+     "ventDays": 251,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 222,
+     "hhCompliant": 186,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 34,
+     "rxAppropriate": 23
+    },
+    "med": {
+     "patientDays": 1522,
+     "ucDays": 260,
+     "clDays": 118,
+     "ventDays": 0,
+     "cauti": 1,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 168,
+     "hhCompliant": 134,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 2,
+      "VRE": 1,
+      "ESBL": 1,
+      "CRAB": 0
+     },
+     "rxReviewed": 30,
+     "rxAppropriate": 23
+    },
+    "surg": {
+     "patientDays": 1299,
+     "ucDays": 166,
+     "clDays": 93,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 164,
+     "ssi": 2,
+     "nsi": 0,
+     "hhOpp": 128,
+     "hhCompliant": 110,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 0,
+      "CRAB": 0
+     },
+     "rxReviewed": 35,
+     "rxAppropriate": 28
+    },
+    "onco": {
+     "patientDays": 1006,
+     "ucDays": 179,
+     "clDays": 99,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 137,
+     "hhCompliant": 103,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 0,
+      "VRE": 1,
+      "ESBL": 7,
+      "CRAB": 0
+     },
+     "rxReviewed": 39,
+     "rxAppropriate": 32
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 375,
+     "dot": 324
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 437,
+     "dot": 346
+    },
+    "Ceftriaxone": {
+     "ddd": 590,
+     "dot": 469
+    },
+    "Vancomycin": {
+     "ddd": 172,
+     "dot": 152
+    },
+    "Colistin": {
+     "ddd": 73,
+     "dot": 76
+    },
+    "Amikacin": {
+     "ddd": 144,
+     "dot": 136
+    },
+    "Linezolid": {
+     "ddd": 79,
+     "dot": 66
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 24
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 37
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-06",
+  "data": {
+   "month": "2026-06",
+   "days": 30,
+   "wards": {
+    "micu": {
+     "patientDays": 570,
+     "ucDays": 261,
+     "clDays": 241,
+     "ventDays": 195,
+     "cauti": 1,
+     "clabsi": 1,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 214,
+     "hhCompliant": 182,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 30,
+     "rxAppropriate": 20
+    },
+    "sicu": {
+     "patientDays": 531,
+     "ucDays": 253,
+     "clDays": 243,
+     "ventDays": 189,
+     "cauti": 2,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 36,
+     "ssi": 0,
+     "nsi": 2,
+     "hhOpp": 226,
+     "hhCompliant": 198,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 5,
+      "CRAB": 1
+     },
+     "rxReviewed": 34,
+     "rxAppropriate": 26
+    },
+    "nicu": {
+     "patientDays": 702,
+     "ucDays": 35,
+     "clDays": 317,
+     "ventDays": 211,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 252,
+     "hhCompliant": 221,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 4,
+      "CRAB": 2
+     },
+     "rxReviewed": 32,
+     "rxAppropriate": 27
+    },
+    "med": {
+     "patientDays": 1546,
+     "ucDays": 264,
+     "clDays": 126,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 1,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 155,
+     "hhCompliant": 126,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 37,
+     "rxAppropriate": 26
+    },
+    "surg": {
+     "patientDays": 1351,
+     "ucDays": 255,
+     "clDays": 109,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 183,
+     "ssi": 6,
+     "nsi": 0,
+     "hhOpp": 125,
+     "hhCompliant": 110,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 0
+     },
+     "rxReviewed": 33,
+     "rxAppropriate": 23
+    },
+    "onco": {
+     "patientDays": 899,
+     "ucDays": 128,
+     "clDays": 63,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 125,
+     "hhCompliant": 104,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 4,
+      "CRAB": 0
+     },
+     "rxReviewed": 30,
+     "rxAppropriate": 25
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 405,
+     "dot": 342
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 428,
+     "dot": 392
+    },
+    "Ceftriaxone": {
+     "ddd": 587,
+     "dot": 507
+    },
+    "Vancomycin": {
+     "ddd": 169,
+     "dot": 159
+    },
+    "Colistin": {
+     "ddd": 81,
+     "dot": 91
+    },
+    "Amikacin": {
+     "ddd": 147,
+     "dot": 156
+    },
+    "Linezolid": {
+     "ddd": 75,
+     "dot": 72
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 24
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 39
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-07",
+  "data": {
+   "month": "2026-07",
+   "days": 31,
+   "wards": {
+    "micu": {
+     "patientDays": 603,
+     "ucDays": 357,
+     "clDays": 285,
+     "ventDays": 171,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 251,
+     "hhCompliant": 221,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 1,
+      "ESBL": 3,
+      "CRAB": 1
+     },
+     "rxReviewed": 32,
+     "rxAppropriate": 23
+    },
+    "sicu": {
+     "patientDays": 549,
+     "ucDays": 284,
+     "clDays": 264,
+     "ventDays": 163,
+     "cauti": 1,
+     "clabsi": 1,
+     "vap": 2,
+     "procedures": 37,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 222,
+     "hhCompliant": 188,
+     "mdro": {
+      "CRE": 3,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 2
+     },
+     "rxReviewed": 36,
+     "rxAppropriate": 26
+    },
+    "nicu": {
+     "patientDays": 787,
+     "ucDays": 39,
+     "clDays": 366,
+     "ventDays": 308,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 220,
+     "hhCompliant": 200,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 4,
+      "VRE": 0,
+      "ESBL": 4,
+      "CRAB": 0
+     },
+     "rxReviewed": 26,
+     "rxAppropriate": 19
+    },
+    "med": {
+     "patientDays": 1668,
+     "ucDays": 273,
+     "clDays": 144,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 144,
+     "hhCompliant": 124,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 0,
+      "VRE": 1,
+      "ESBL": 0,
+      "CRAB": 1
+     },
+     "rxReviewed": 25,
+     "rxAppropriate": 19
+    },
+    "surg": {
+     "patientDays": 1262,
+     "ucDays": 166,
+     "clDays": 90,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 181,
+     "ssi": 3,
+     "nsi": 0,
+     "hhOpp": 161,
+     "hhCompliant": 136,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 30,
+     "rxAppropriate": 24
+    },
+    "onco": {
+     "patientDays": 969,
+     "ucDays": 176,
+     "clDays": 84,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 185,
+     "hhCompliant": 148,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 32,
+     "rxAppropriate": 23
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 391,
+     "dot": 346
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 382,
+     "dot": 391
+    },
+    "Ceftriaxone": {
+     "ddd": 612,
+     "dot": 571
+    },
+    "Vancomycin": {
+     "ddd": 161,
+     "dot": 143
+    },
+    "Colistin": {
+     "ddd": 86,
+     "dot": 83
+    },
+    "Amikacin": {
+     "ddd": 136,
+     "dot": 158
+    },
+    "Linezolid": {
+     "ddd": 80,
+     "dot": 68
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 24
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 35
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-08",
+  "data": {
+   "month": "2026-08",
+   "days": 31,
+   "wards": {
+    "micu": {
+     "patientDays": 632,
+     "ucDays": 372,
+     "clDays": 302,
+     "ventDays": 234,
+     "cauti": 2,
+     "clabsi": 1,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 233,
+     "hhCompliant": 198,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 6,
+      "CRAB": 1
+     },
+     "rxReviewed": 37,
+     "rxAppropriate": 29
+    },
+    "sicu": {
+     "patientDays": 566,
+     "ucDays": 267,
+     "clDays": 278,
+     "ventDays": 208,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 37,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 228,
+     "hhCompliant": 199,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 2,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 1
+     },
+     "rxReviewed": 31,
+     "rxAppropriate": 24
+    },
+    "nicu": {
+     "patientDays": 709,
+     "ucDays": 35,
+     "clDays": 331,
+     "ventDays": 283,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 252,
+     "hhCompliant": 224,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 8,
+      "CRAB": 0
+     },
+     "rxReviewed": 27,
+     "rxAppropriate": 22
+    },
+    "med": {
+     "patientDays": 1458,
+     "ucDays": 240,
+     "clDays": 100,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 145,
+     "hhCompliant": 114,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 2,
+      "VRE": 1,
+      "ESBL": 2,
+      "CRAB": 1
+     },
+     "rxReviewed": 35,
+     "rxAppropriate": 25
+    },
+    "surg": {
+     "patientDays": 1419,
+     "ucDays": 219,
+     "clDays": 136,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 164,
+     "ssi": 2,
+     "nsi": 0,
+     "hhOpp": 195,
+     "hhCompliant": 161,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 0
+     },
+     "rxReviewed": 39,
+     "rxAppropriate": 28
+    },
+    "onco": {
+     "patientDays": 973,
+     "ucDays": 173,
+     "clDays": 78,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 124,
+     "hhCompliant": 96,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 3,
+      "CRAB": 1
+     },
+     "rxReviewed": 37,
+     "rxAppropriate": 29
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 413,
+     "dot": 352
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 383,
+     "dot": 356
+    },
+    "Ceftriaxone": {
+     "ddd": 608,
+     "dot": 489
+    },
+    "Vancomycin": {
+     "ddd": 163,
+     "dot": 144
+    },
+    "Colistin": {
+     "ddd": 88,
+     "dot": 97
+    },
+    "Amikacin": {
+     "ddd": 150,
+     "dot": 164
+    },
+    "Linezolid": {
+     "ddd": 69,
+     "dot": 68
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 23
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 39
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-09",
+  "data": {
+   "month": "2026-09",
+   "days": 30,
+   "wards": {
+    "micu": {
+     "patientDays": 571,
+     "ucDays": 282,
+     "clDays": 261,
+     "ventDays": 195,
+     "cauti": 0,
+     "clabsi": 2,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 1,
+     "hhOpp": 221,
+     "hhCompliant": 185,
+     "mdro": {
+      "CRE": 3,
+      "MRSA": 3,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 2
+     },
+     "rxReviewed": 33,
+     "rxAppropriate": 27
+    },
+    "sicu": {
+     "patientDays": 504,
+     "ucDays": 294,
+     "clDays": 257,
+     "ventDays": 184,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 36,
+     "ssi": 1,
+     "nsi": 0,
+     "hhOpp": 241,
+     "hhCompliant": 202,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 2,
+      "VRE": 1,
+      "ESBL": 4,
+      "CRAB": 1
+     },
+     "rxReviewed": 26,
+     "rxAppropriate": 18
+    },
+    "nicu": {
+     "patientDays": 694,
+     "ucDays": 35,
+     "clDays": 325,
+     "ventDays": 237,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 1,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 2,
+     "hhOpp": 207,
+     "hhCompliant": 189,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 5,
+      "CRAB": 2
+     },
+     "rxReviewed": 37,
+     "rxAppropriate": 29
+    },
+    "med": {
+     "patientDays": 1586,
+     "ucDays": 264,
+     "clDays": 93,
+     "ventDays": 0,
+     "cauti": 1,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 174,
+     "hhCompliant": 131,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 0
+     },
+     "rxReviewed": 31,
+     "rxAppropriate": 25
+    },
+    "surg": {
+     "patientDays": 1363,
+     "ucDays": 259,
+     "clDays": 118,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 162,
+     "ssi": 3,
+     "nsi": 0,
+     "hhOpp": 193,
+     "hhCompliant": 144,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 1,
+      "CRAB": 0
+     },
+     "rxReviewed": 28,
+     "rxAppropriate": 24
+    },
+    "onco": {
+     "patientDays": 887,
+     "ucDays": 127,
+     "clDays": 54,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 195,
+     "hhCompliant": 160,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 5,
+      "CRAB": 0
+     },
+     "rxReviewed": 36,
+     "rxAppropriate": 27
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 431,
+     "dot": 369
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 418,
+     "dot": 339
+    },
+    "Ceftriaxone": {
+     "ddd": 615,
+     "dot": 565
+    },
+    "Vancomycin": {
+     "ddd": 166,
+     "dot": 139
+    },
+    "Colistin": {
+     "ddd": 90,
+     "dot": 98
+    },
+    "Amikacin": {
+     "ddd": 133,
+     "dot": 155
+    },
+    "Linezolid": {
+     "ddd": 75,
+     "dot": 72
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 24
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 39
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "monthly",
+  "doc_id": "2026-10",
+  "data": {
+   "month": "2026-10",
+   "days": 27,
+   "wards": {
+    "micu": {
+     "patientDays": 575,
+     "ucDays": 259,
+     "clDays": 277,
+     "ventDays": 224,
+     "cauti": 1,
+     "clabsi": 4,
+     "vap": 2,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 223,
+     "hhCompliant": 190,
+     "mdro": {
+      "CRE": 6,
+      "MRSA": 1,
+      "VRE": 2,
+      "ESBL": 5,
+      "CRAB": 1
+     },
+     "rxReviewed": 40,
+     "rxAppropriate": 29
+    },
+    "sicu": {
+     "patientDays": 496,
+     "ucDays": 264,
+     "clDays": 235,
+     "ventDays": 194,
+     "cauti": 0,
+     "clabsi": 1,
+     "vap": 0,
+     "procedures": 32,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 201,
+     "hhCompliant": 157,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 2,
+      "VRE": 1,
+      "ESBL": 4,
+      "CRAB": 1
+     },
+     "rxReviewed": 27,
+     "rxAppropriate": 20
+    },
+    "nicu": {
+     "patientDays": 616,
+     "ucDays": 31,
+     "clDays": 268,
+     "ventDays": 224,
+     "cauti": 0,
+     "clabsi": 1,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 235,
+     "hhCompliant": 214,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 2,
+      "VRE": 0,
+      "ESBL": 2,
+      "CRAB": 1
+     },
+     "rxReviewed": 27,
+     "rxAppropriate": 19
+    },
+    "med": {
+     "patientDays": 1433,
+     "ucDays": 241,
+     "clDays": 101,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 173,
+     "hhCompliant": 136,
+     "mdro": {
+      "CRE": 0,
+      "MRSA": 0,
+      "VRE": 1,
+      "ESBL": 0,
+      "CRAB": 0
+     },
+     "rxReviewed": 36,
+     "rxAppropriate": 25
+    },
+    "surg": {
+     "patientDays": 1160,
+     "ucDays": 145,
+     "clDays": 90,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 143,
+     "ssi": 2,
+     "nsi": 0,
+     "hhOpp": 167,
+     "hhCompliant": 127,
+     "mdro": {
+      "CRE": 1,
+      "MRSA": 0,
+      "VRE": 0,
+      "ESBL": 0,
+      "CRAB": 0
+     },
+     "rxReviewed": 37,
+     "rxAppropriate": 30
+    },
+    "onco": {
+     "patientDays": 812,
+     "ucDays": 150,
+     "clDays": 71,
+     "ventDays": 0,
+     "cauti": 0,
+     "clabsi": 0,
+     "vap": 0,
+     "procedures": 0,
+     "ssi": 0,
+     "nsi": 0,
+     "hhOpp": 0,
+     "hhCompliant": 0,
+     "mdro": {
+      "CRE": 2,
+      "MRSA": 1,
+      "VRE": 0,
+      "ESBL": 6,
+      "CRAB": 1
+     },
+     "rxReviewed": 31,
+     "rxAppropriate": 25
+    }
+   },
+   "abx": {
+    "Meropenem": {
+     "ddd": 454,
+     "dot": 390
+    },
+    "Piperacillin-tazobactam": {
+     "ddd": 433,
+     "dot": 349
+    },
+    "Ceftriaxone": {
+     "ddd": 571,
+     "dot": 524
+    },
+    "Vancomycin": {
+     "ddd": 161,
+     "dot": 157
+    },
+    "Colistin": {
+     "ddd": 86,
+     "dot": 90
+    },
+    "Amikacin": {
+     "ddd": 127,
+     "dot": 144
+    },
+    "Linezolid": {
+     "ddd": 78,
+     "dot": 71
+    }
+   },
+   "env": {
+    "air": {
+     "tested": 24,
+     "passed": 23
+    },
+    "water": {
+     "tested": 12,
+     "passed": 12
+    },
+    "surface": {
+     "tested": 40,
+     "passed": 39
+    }
+   }
+  }
+ },
+ {
+  "op": "set",
+  "collection": "wards",
+  "doc_id": "micu",
+  "data": {
+   "name": "Medical ICU",
+   "type": "icu",
+   "beds": 24
+  }
+ },
+ {
+  "op": "set",
+  "collection": "wards",
+  "doc_id": "sicu",
+  "data": {
+   "name": "Surgical ICU",
+   "type": "icu",
+   "beds": 20
+  }
+ },
+ {
+  "op": "set",
+  "collection": "wards",
+  "doc_id": "nicu",
+  "data": {
+   "name": "NICU",
+   "type": "icu",
+   "beds": 28
+  }
+ },
+ {
+  "op": "set",
+  "collection": "wards",
+  "doc_id": "med",
+  "data": {
+   "name": "Medicine Ward",
+   "type": "ward",
+   "beds": 60
+  }
+ },
+ {
+  "op": "set",
+  "collection": "wards",
+  "doc_id": "surg",
+  "data": {
+   "name": "Surgery Ward",
+   "type": "ward",
+   "beds": 50
+  }
+ },
+ {
+  "op": "set",
+  "collection": "wards",
+  "doc_id": "onco",
+  "data": {
+   "name": "Oncology",
+   "type": "ward",
+   "beds": 36
+  }
+ },
+ {
+  "op": "set",
+  "collection": "config",
+  "doc_id": "thresholds",
+  "data": {
+   "hhTarget": 80,
+   "cauti": 3.0,
+   "clabsi": 3.0,
+   "vap": 6.0,
+   "ssi": 2.5,
+   "ucDU": 0.4,
+   "clDU": 0.5,
+   "ventDU": 0.4,
+   "rxTarget": 80,
+   "mdroRise": 1.5,
+   "envTarget": 95
+  }
+ },
+ {
+  "op": "set",
+  "collection": "actions",
+  "doc_id": "a1",
+  "data": {
+   "title": "Re-train Medical ICU nurses on the central line insertion bundle",
+   "ward": "micu",
+   "owner": "Sr. Nurse Kavitha",
+   "due": "2026-11-05",
+   "status": "open",
+   "source": "CLABSI rise",
+   "created": "2026-10-01"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "actions",
+  "doc_id": "a2",
+  "data": {
+   "title": "Install alcohol rub dispensers at every bed in Surgery Ward",
+   "ward": "surg",
+   "owner": "Nursing Supt.",
+   "due": "2026-10-20",
+   "status": "open",
+   "source": "Hand hygiene decline",
+   "created": "2026-10-01"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "actions",
+  "doc_id": "a3",
+  "data": {
+   "title": "Contact-precautions signage for CRE patients",
+   "ward": "micu",
+   "owner": "ICN Team",
+   "due": "2026-10-30",
+   "status": "open",
+   "source": "CRE cluster",
+   "created": "2026-10-01"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "actions",
+  "doc_id": "a4",
+  "data": {
+   "title": "Replace damaged HEPA filter in OT-3",
+   "ward": "sicu",
+   "owner": "Biomedical Eng.",
+   "due": "2026-09-30",
+   "status": "done",
+   "source": "Air sampling failure",
+   "created": "2026-10-01"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "actions",
+  "doc_id": "a5",
+  "data": {
+   "title": "Daily catheter necessity review in Medicine Ward",
+   "ward": "med",
+   "owner": "Dr. Anand",
+   "due": "2026-11-15",
+   "status": "open",
+   "source": "CAUTI prevention",
+   "created": "2026-10-01"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "actions",
+  "doc_id": "a6",
+  "data": {
+   "title": "Restart Oncology hand hygiene audits",
+   "ward": "onco",
+   "owner": "ICN Team",
+   "due": "2026-10-25",
+   "status": "open",
+   "source": "Missed surveillance",
+   "created": "2026-10-01"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "ra",
+  "doc_id": "r1",
+  "data": {
+   "patientRef": "IP-24811",
+   "drug": "Colistin",
+   "ward": "micu",
+   "indication": "CRAB bloodstream infection",
+   "requestedBy": "Dr. Meena",
+   "date": "2026-10-27",
+   "status": "pending"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "ra",
+  "doc_id": "r2",
+  "data": {
+   "patientRef": "IP-24790",
+   "drug": "Meropenem",
+   "ward": "med",
+   "indication": "Febrile neutropenia, no culture yet",
+   "requestedBy": "Dr. Rahul",
+   "date": "2026-10-26",
+   "status": "pending"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "ra",
+  "doc_id": "r3",
+  "data": {
+   "patientRef": "IP-24702",
+   "drug": "Linezolid",
+   "ward": "sicu",
+   "indication": "MRSA wound infection",
+   "requestedBy": "Dr. Iqbal",
+   "date": "2026-10-24",
+   "status": "approved"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "ra",
+  "doc_id": "r4",
+  "data": {
+   "patientRef": "IP-24688",
+   "drug": "Meropenem",
+   "ward": "onco",
+   "indication": "ESBL pyelonephritis, sensitive to pip-taz",
+   "requestedBy": "Dr. Sara",
+   "date": "2026-10-22",
+   "status": "rejected"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "ra",
+  "doc_id": "r5",
+  "data": {
+   "patientRef": "IP-24650",
+   "drug": "Vancomycin",
+   "ward": "nicu",
+   "indication": "Suspected late-onset sepsis",
+   "requestedBy": "Dr. Priya",
+   "date": "2026-10-20",
+   "status": "approved"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "audits",
+  "doc_id": "u1",
+  "data": {
+   "title": "Hand hygiene audit, all wards",
+   "due": "2026-10-31",
+   "status": "open",
+   "frequency": "Monthly"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "audits",
+  "doc_id": "u2",
+  "data": {
+   "title": "Biomedical waste segregation audit",
+   "due": "2026-10-15",
+   "status": "open",
+   "frequency": "Monthly"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "audits",
+  "doc_id": "u3",
+  "data": {
+   "title": "CLABSI bundle compliance audit",
+   "due": "2026-10-10",
+   "status": "done",
+   "frequency": "Monthly"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "audits",
+  "doc_id": "u4",
+  "data": {
+   "title": "Environmental cleaning audit",
+   "due": "2026-10-20",
+   "status": "open",
+   "frequency": "Monthly"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "audits",
+  "doc_id": "u5",
+  "data": {
+   "title": "Kitchen and dietary hygiene audit",
+   "due": "2026-11-12",
+   "status": "open",
+   "frequency": "Quarterly"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "audits",
+  "doc_id": "u6",
+  "data": {
+   "title": "Mock NABH assessment, infection control",
+   "due": "2026-12-05",
+   "status": "open",
+   "frequency": "Annual"
+  }
+ },
+ {
+  "op": "set",
+  "collection": "policies",
+  "doc_id": "p1",
+  "data": {
+   "title": "Hand hygiene policy",
+   "lastReviewed": "2025-09-15",
+   "everyMonths": 12
+  }
+ },
+ {
+  "op": "set",
+  "collection": "policies",
+  "doc_id": "p2",
+  "data": {
+   "title": "Isolation and standard precautions SOP",
+   "lastReviewed": "2026-02-10",
+   "everyMonths": 12
+  }
+ },
+ {
+  "op": "set",
+  "collection": "policies",
+  "doc_id": "p3",
+  "data": {
+   "title": "Biomedical waste management SOP",
+   "lastReviewed": "2025-08-01",
+   "everyMonths": 12
+  }
+ },
+ {
+  "op": "set",
+  "collection": "policies",
+  "doc_id": "p4",
+  "data": {
+   "title": "Hospital antimicrobial policy",
+   "lastReviewed": "2025-11-20",
+   "everyMonths": 12
+  }
+ },
+ {
+  "op": "set",
+  "collection": "policies",
+  "doc_id": "p5",
+  "data": {
+   "title": "Sharps and needle-stick injury protocol",
+   "lastReviewed": "2026-05-05",
+   "everyMonths": 12
+  }
+ },
+ {
+  "op": "set",
+  "collection": "policies",
+  "doc_id": "p6",
+  "data": {
+   "title": "CSSD sterilisation and monitoring SOP",
+   "lastReviewed": "2025-12-01",
+   "everyMonths": 12
+  }
+ },
+ {
+  "op": "set",
+  "collection": "content",
+  "doc_id": "antibiogram",
+  "data": {
+   "period": "Apr to Sep 2026",
+   "antibiotics": [
+    "Amikacin",
+    "Ceftriaxone",
+    "Pip-tazo",
+    "Meropenem",
+    "Colistin",
+    "Vancomycin",
+    "Linezolid"
+   ],
+   "rows": [
+    {
+     "org": "E. coli",
+     "n": 412,
+     "s": [
+      82,
+      31,
+      61,
+      78,
+      99,
+      null,
+      null
+     ]
+    },
+    {
+     "org": "K. pneumoniae",
+     "n": 296,
+     "s": [
+      54,
+      18,
+      39,
+      52,
+      93,
+      null,
+      null
+     ]
+    },
+    {
+     "org": "P. aeruginosa",
+     "n": 143,
+     "s": [
+      71,
+      null,
+      66,
+      63,
+      97,
+      null,
+      null
+     ]
+    },
+    {
+     "org": "A. baumannii",
+     "n": 88,
+     "s": [
+      22,
+      null,
+      14,
+      17,
+      95,
+      null,
+      null
+     ]
+    },
+    {
+     "org": "S. aureus",
+     "n": 167,
+     "s": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      100,
+      99
+     ]
+    },
+    {
+     "org": "Enterococcus spp.",
+     "n": 74,
+     "s": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      88,
+      97
+     ]
+    },
+    {
+     "org": "Enterobacter cloacae",
+     "n": 21,
+     "s": [
+      70,
+      40,
+      55,
+      80,
+      95,
+      null,
+      null
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "op": "set",
+  "collection": "content",
+  "doc_id": "nabh",
+  "data": {
+   "items": [
+    {
+     "id": "ic-committee",
+     "title": "Infection control committee constituted, with minutes of monthly meetings",
+     "source": "manual",
+     "ready": true
+    },
+    {
+     "id": "ic-manual",
+     "title": "Infection control manual, current and approved",
+     "source": "policy",
+     "ready": true
+    },
+    {
+     "id": "hh-data",
+     "title": "Hand hygiene compliance data, last 3 months",
+     "source": "auto",
+     "ready": false
+    },
+    {
+     "id": "hai-data",
+     "title": "Device-associated HAI rates with denominators (CAUTI, CLABSI, VAP)",
+     "source": "auto",
+     "ready": false
+    },
+    {
+     "id": "ssi-data",
+     "title": "Surgical site infection surveillance",
+     "source": "auto",
+     "ready": false
+    },
+    {
+     "id": "env-data",
+     "title": "Air, water and surface surveillance reports",
+     "source": "auto",
+     "ready": false
+    },
+    {
+     "id": "ams-data",
+     "title": "Antimicrobial stewardship data: consumption, audits, antibiogram",
+     "source": "auto",
+     "ready": false
+    },
+    {
+     "id": "nsi-data",
+     "title": "Needle-stick injury records and post-exposure follow-up",
+     "source": "auto",
+     "ready": false
+    },
+    {
+     "id": "capa",
+     "title": "Corrective and preventive actions with closure evidence",
+     "source": "auto",
+     "ready": false
+    },
+    {
+     "id": "training",
+     "title": "Staff training records on infection control",
+     "source": "manual",
+     "ready": false
+    }
+   ]
+  }
+ },
+ {
+  "op": "set",
+  "collection": "content",
+  "doc_id": "education",
+  "data": {
+   "modules": [
+    {
+     "id": "m1",
+     "title": "The five moments, revisited",
+     "cadence": "Weekly",
+     "month": "2026-10",
+     "summary": "When to clean hands at the bedside, with ward-specific examples.",
+     "body": "Before touching a patient. Before a clean or aseptic procedure. After body-fluid exposure risk. After touching a patient. After touching patient surroundings. Most missed opportunities on our wards happen at moment 5, after touching bed rails and monitors."
+    },
+    {
+     "id": "m2",
+     "title": "Central line bundle: insertion and maintenance",
+     "cadence": "Monthly",
+     "month": "2026-10",
+     "summary": "Why Medical ICU\u2019s CLABSI rate is rising, and the five checks that prevent it.",
+     "body": "Insertion: hand hygiene, maximal barrier precautions, chlorhexidine skin prep, avoid femoral site. Maintenance: scrub the hub for 15 seconds, change dressings when soiled, review line necessity daily and remove lines that are no longer needed."
+    },
+    {
+     "id": "m3",
+     "title": "CRE: contact precautions that actually work",
+     "cadence": "Weekly",
+     "month": "2026-10",
+     "summary": "Single room or cohorting, dedicated equipment, and screening contacts.",
+     "body": "Place CRE patients in single rooms or cohort them. Use gown and gloves on entry. Dedicate stethoscopes and BP cuffs. Screen roommates and contacts with rectal swabs. Flag the patient record so precautions follow transfers."
+    },
+    {
+     "id": "m4",
+     "title": "Catheter necessity: remove it today",
+     "cadence": "Monthly",
+     "month": "2026-09",
+     "summary": "A daily question that cuts CAUTI.",
+     "body": "Ask every day whether the urinary catheter is still indicated. Valid reasons are few: urinary retention, accurate output monitoring in the critically ill, perioperative use, and comfort at end of life."
+    }
+   ],
+   "quiz": [
+    {
+     "q": "Which hand hygiene moment is most often missed on our wards?",
+     "o": [
+      "Before touching a patient",
+      "After touching patient surroundings",
+      "Before an aseptic procedure",
+      "After body-fluid exposure"
+     ],
+     "a": 1
+    },
+    {
+     "q": "How long should you scrub a central line hub before access?",
+     "o": [
+      "3 seconds",
+      "15 seconds",
+      "1 minute",
+      "No scrub needed with a closed connector"
+     ],
+     "a": 1
+    },
+    {
+     "q": "A CRE-positive patient is admitted to a shared bay. What comes first?",
+     "o": [
+      "Start colistin",
+      "Contact precautions and single room or cohort",
+      "Discharge early",
+      "Repeat the culture"
+     ],
+     "a": 1
+    },
+    {
+     "q": "CLABSI rate is expressed as infections per\u2026",
+     "o": [
+      "100 admissions",
+      "1,000 patient-days",
+      "1,000 central-line days",
+      "100 central lines inserted"
+     ],
+     "a": 2
+    },
+    {
+     "q": "Which is NOT a valid reason to keep a urinary catheter?",
+     "o": [
+      "Acute urinary retention",
+      "Nursing convenience",
+      "Hourly output monitoring in ICU",
+      "Perioperative use"
+     ],
+     "a": 1
+    }
+   ]
+  }
+ }
+]

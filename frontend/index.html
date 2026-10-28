@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Infection Prevention Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#F3F5F4;--surface:#FFFFFF;--surface2:#F8FAF9;--ink:#152429;--muted:#58686D;--line:#DCE3E2;
+  --violet:#56399A;--violet-soft:#ECE6F8;--pink:#BE3A68;--pink-soft:#FBE7EE;
+  --bad:#B4372A;--bad-soft:#FBE8E4;--warn:#9A6210;--warn-soft:#FBF0DC;--good:#2B7553;--good-soft:#E2F1E8;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1618;--surface:#162023;--surface2:#1B272A;--ink:#E4ECEB;--muted:#97A9AC;--line:#28373A;
+  --violet:#AC97EA;--violet-soft:#29233F;--pink:#EE82A8;--pink-soft:#3A1F2C;
+  --bad:#F28A79;--bad-soft:#3B201B;--warn:#E4B35C;--warn-soft:#372B16;--good:#6CC89D;--good-soft:#163024;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1618;--surface:#162023;--surface2:#1B272A;--ink:#E4ECEB;--muted:#97A9AC;--line:#28373A;
+  --violet:#AC97EA;--violet-soft:#29233F;--pink:#EE82A8;--pink-soft:#3A1F2C;
+  --bad:#F28A79;--bad-soft:#3B201B;--warn:#E4B35C;--warn-soft:#372B16;--good:#6CC89D;--good-soft:#163024;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800}
+h2{font-size:1.3rem;font-weight:700}
+h3{font-size:1.05rem;font-weight:700}
+p{margin:0}
+a{color:var(--violet)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--violet);outline-offset:2px;border-radius:4px}
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+nav.side{position:sticky;top:env(safe-area-inset-top,0px);height:calc(100vh - env(safe-area-inset-top,0px));overflow:auto;background:var(--surface);border-right:1px solid var(--line);padding:20px 12px;display:flex;flex-direction:column;gap:2px}
+.brand{padding:4px 10px 18px;display:flex;gap:10px;align-items:center}
+.brand svg{flex:none}
+.brand b{font-family:var(--display);font-size:1.02rem;line-height:1.1;display:block}
+.brand span{font-size:.78rem;color:var(--muted)}
+nav.side a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:.95rem}
+nav.side a:hover{background:var(--surface2)}
+nav.side a[aria-current="page"]{background:var(--violet-soft);color:var(--violet);font-weight:700}
+nav.side a .count{margin-left:auto;background:var(--bad);color:var(--surface);border-radius:999px;font-size:.72rem;padding:1px 7px;font-weight:700}
+nav.side .grp{font-size:.78rem;color:var(--muted);padding:14px 12px 4px}
+main{padding:24px clamp(16px,3vw,40px) 64px;min-width:0}
+.topbar{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:22px}
+.topbar p{color:var(--muted);margin-top:4px}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select,input,textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-height:40px;max-width:100%}
+textarea{min-height:80px;width:100%}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 14px;min-height:40px;cursor:pointer;font-weight:700}
+.btn:hover{border-color:var(--violet)}
+.btn.primary{background:var(--violet);border-color:var(--violet);color:var(--surface)}
+.btn.small{min-height:32px;padding:4px 10px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.panel + .panel,.stack > * + *{margin-top:18px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.ph{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.ph p{color:var(--muted);font-size:.9rem}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+.demo{background:var(--violet-soft);color:var(--ink);border-radius:10px;padding:10px 14px;font-size:.9rem;margin-bottom:18px}
+
+/* briefing */
+.briefing{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.briefing header{padding:22px 24px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.briefing header p{color:var(--muted)}
+.q{display:grid;grid-template-columns:6px 1fr;border-bottom:1px solid var(--line)}
+.q:last-child{border-bottom:0}
+.q .bar{background:var(--line)}
+.q.bad .bar{background:var(--bad)}.q.warn .bar{background:var(--warn)}.q.good .bar{background:var(--good)}.q.info .bar{background:var(--violet)}
+.q .body{padding:18px 24px;display:grid;grid-template-columns:minmax(200px,1fr) minmax(240px,1.4fr);gap:8px 28px}
+.q .ask{font-family:var(--display);font-weight:700;font-size:1.15rem;line-height:1.25}
+.q.lead .ask{font-size:1.5rem}
+.q .verdict{font-family:var(--display);font-weight:800;font-size:1.25rem}
+.q.bad .verdict{color:var(--bad)}.q.warn .verdict{color:var(--warn)}.q.good .verdict{color:var(--good)}.q.info .verdict{color:var(--violet)}
+.q .detail{color:var(--muted);margin-top:4px}
+.q ul{margin:6px 0 0;padding-left:18px}
+.q li{margin:3px 0}
+@media (max-width:760px){.q .body{grid-template-columns:1fr}}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+.kpi{padding:14px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin-right:-1px;margin-bottom:-1px}
+.kpi .v{font-family:var(--display);font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .l{font-size:.85rem;color:var(--muted)}
+.kpi .d{font-size:.8rem;margin-top:2px}
+.up-bad{color:var(--bad)}.down-good{color:var(--good)}.up-good{color:var(--good)}.down-bad{color:var(--bad)}
+.chartbox{position:relative;height:260px}
+
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.92rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:700;color:var(--muted);font-size:.84rem}
+td.num,th.num{text-align:right}
+.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:.8rem;font-weight:700}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.warn{background:var(--warn-soft);color:var(--warn)}.pill.good{background:var(--good-soft);color:var(--good)}.pill.info{background:var(--violet-soft);color:var(--violet)}.pill.mute{background:var(--surface2);color:var(--muted)}
+.cell-bad{background:var(--bad-soft);color:var(--bad);font-weight:700}
+.cell-warn{background:var(--warn-soft);color:var(--warn);font-weight:700}
+.cell-good{color:var(--good)}
+.heat td.h{text-align:center;font-weight:700;min-width:56px}
+
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;color:var(--muted);font-weight:700;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--violet);border-bottom-color:var(--violet)}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.tile{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;min-height:100px;display:flex;flex-direction:column;gap:6px}
+.tile:hover{border-color:var(--violet)}
+.tile[aria-pressed="true"]{border-color:var(--violet);box-shadow:inset 0 0 0 1px var(--violet)}
+.tile b{font-family:var(--display);font-size:1.05rem}
+.tile span{color:var(--muted);font-size:.86rem}
+.tile .src{margin-top:auto;font-size:.76rem;color:var(--pink);font-weight:700}
+form.entry{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px 14px;margin-top:6px}
+form.entry label{display:flex;flex-direction:column;gap:4px;font-size:.88rem;font-weight:700}
+form.entry label.wide{grid-column:1/-1}
+form.entry .actions{grid-column:1/-1;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.calc{grid-column:1/-1;background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:.92rem}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:50;font-weight:700;max-width:90vw}
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:12px 0;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.list li:last-child{border-bottom:0}
+.list .main{flex:1;min-width:220px}
+.alert{display:grid;grid-template-columns:6px 1fr auto;gap:0 14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:start}
+.alert .bar{border-radius:3px;align-self:stretch}
+.alert.bad .bar{background:var(--bad)}.alert.warn .bar{background:var(--warn)}.alert.info .bar{background:var(--violet)}
+.alert b{display:block}
+.ai-out{white-space:pre-wrap;background:var(--surface2);border-radius:10px;padding:14px;margin-top:12px;font-size:.95rem}
+.report{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:28px;max-width:900px}
+.report h2{margin:22px 0 8px}.report h2:first-of-type{margin-top:8px}
+.report p{margin:6px 0;max-width:72ch}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.quizq{margin:14px 0}
+.quizq fieldset{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.quizq legend{font-weight:700;padding:0 6px}
+.quizq label{display:flex;gap:8px;padding:5px 0;cursor:pointer}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  nav.side{position:sticky;top:0;height:auto;flex-direction:row;overflow-x:auto;padding:8px;border-right:0;border-bottom:1px solid var(--line);z-index:20;padding-top:calc(8px + env(safe-area-inset-top,0px));top:0}
+  .brand,nav.side .grp{display:none}
+  nav.side a{white-space:nowrap;padding:8px 12px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<nav class="side" id="nav" aria-label="Sections">
+  <div class="brand">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="12" cy="13" r="7" fill="var(--violet)"/><circle cx="23" cy="20" r="7" fill="var(--pink)" opacity=".9"/><circle cx="14" cy="25" r="4" fill="var(--violet)" opacity=".55"/></svg>
+    <div><b>Infection Prevention Intelligence</b><span id="hospName">Demo Hospital</span></div>
+  </div>
+  <a href="#overview" data-r="overview">Overview</a>
+  <a href="#record" data-r="record">Record data</a>
+  <a href="#review" data-r="review">Review and data quality <span class="count" id="reviewCount" hidden></span></a>
+  <div class="grp">Analyse</div>
+  <a href="#surveillance" data-r="surveillance">Surveillance</a>
+  <a href="#stewardship" data-r="stewardship">Stewardship</a>
+  <a href="#warning" data-r="warning">Early warning</a>
+  <a href="#alerts" data-r="alerts">Alerts <span class="count" id="alertCount" hidden></span></a>
+  <div class="grp">Act</div>
+  <a href="#reports" data-r="reports">Reports</a>
+  <a href="#accreditation" data-r="accreditation">Accreditation</a>
+  <a href="#learning" data-r="learning">Learning</a>
+  <a href="#thresholds" data-r="thresholds">Thresholds</a>
+</nav>
+<main id="main"><div class="empty">Loading surveillance data…</div></main>
+</div>
+<div id="toast" class="toast" role="status" hidden></div>
+<script src="local-runtime.js"></script>
+<script>
+"use strict";
+/* ---------- state ---------- */
+const S={wards:{},monthly:{},entries:[],actions:[],ra:[],audits:[],policies:[],quiz:[],th:null,content:{},alertState:{},loaded:new Set(),month:null,db:null,user:null,sample:null,downloads:null,canWrite:true,uid:null,names:{}};
+const DEFAULT_TH={hhTarget:80,cauti:3.0,clabsi:3.0,vap:6.0,ssi:2.5,ucDU:0.4,clDU:0.5,ventDU:0.4,rxTarget:80,mdroRise:1.5,envTarget:95,abgMin:30};
+const TH=()=>Object.assign({},DEFAULT_TH,S.th||{});
+const ORGS=["CRE","MRSA","VRE","ESBL","CRAB"];
+const ORG_NAMES={CRE:"Carbapenem-resistant Enterobacterales",MRSA:"Methicillin-resistant S. aureus",VRE:"Vancomycin-resistant Enterococcus",ESBL:"ESBL producers",CRAB:"Carbapenem-resistant A. baumannii"};
+const HAI=[{k:"cauti",n:"CAUTI",den:"ucDays",unit:"per 1,000 catheter-days"},{k:"clabsi",n:"CLABSI",den:"clDays",unit:"per 1,000 central-line days"},{k:"vap",n:"VAP",den:"ventDays",unit:"per 1,000 ventilator-days"}];
+const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const mLabel=m=>{const[y,mo]=m.split("-");return MN[+mo-1]+" "+y};
+const mShort=m=>{const[y,mo]=m.split("-");return MN[+mo-1]+" ’"+y.slice(2)};
+const today=()=>new Date().toISOString().slice(0,10);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const r1=v=>v==null||!isFinite(v)?"–":(Math.round(v*10)/10).toFixed(1);
+const r0=v=>v==null||!isFinite(v)?"–":Math.round(v).toLocaleString("en-IN");
+const rate=(n,d,k)=>d>0?n/d*k:null;
+const wardName=id=>S.wards[id]?.name||id;
+const wardIds=()=>Object.keys(S.wards).sort((a,b)=>(S.wards[a].type===S.wards[b].type?0:S.wards[a].type==="icu"?-1:1)||wardName(a).localeCompare(wardName(b)));
+const blankWard=()=>({patientDays:0,ucDays:0,clDays:0,ventDays:0,cauti:0,clabsi:0,vap:0,procedures:0,ssi:0,nsi:0,hhOpp:0,hhCompliant:0,mdro:{CRE:0,MRSA:0,VRE:0,ESBL:0,CRAB:0},rxReviewed:0,rxAppropriate:0});
+function months(){
+  const set=new Set(Object.keys(S.monthly));
+  S.entries.forEach(e=>e.month&&set.add(e.month));
+  return [...set].sort();
+}
+const aggCache=new Map();
+function agg(m){
+  if(aggCache.has(m))return aggCache.get(m);
+  const base=S.monthly[m]||{};
+  const W={};
+  wardIds().forEach(w=>{const b=base.wards?.[w];W[w]=Object.assign(blankWard(),b?JSON.parse(JSON.stringify(b)):{});W[w].mdro=Object.assign(blankWard().mdro,W[w].mdro||{})});
+  const abx=JSON.parse(JSON.stringify(base.abx||{}));
+  const env=JSON.parse(JSON.stringify(base.env||{air:{tested:0,passed:0},water:{tested:0,passed:0},surface:{tested:0,passed:0}}));
+  for(const e of S.entries){
+    if(e.month!==m||e.voided)continue;
+    const w=W[e.ward];
+    switch(e.kind){
+      case"hh":if(w){w.hhOpp+=+e.opp||0;w.hhCompliant+=+e.compliant||0}break;
+      case"census":if(w){w.patientDays+=+e.patients||0;w.ucDays+=+e.uc||0;w.clDays+=+e.cl||0;w.ventDays+=+e.vent||0}break;
+      case"hai":if(w&&w[e.type]!=null&&(e.status||"confirmed")==="confirmed")w[e.type]+=1;break;
+      case"proc":if(w)w.procedures+=+e.count||0;break;
+      case"nsi":if(w)w.nsi+=1;break;
+      case"isolate":if(w&&e.org in w.mdro)w.mdro[e.org]+=1;break;
+      case"rxaudit":if(w){w.rxReviewed+=e.reviewed!=null?+e.reviewed:1;w.rxAppropriate+=e.appropriate!=null?+e.appropriate:(e.outcome==="Appropriate"?1:0)}break;
+      case"env":{const t=env[e.type]||(env[e.type]={tested:0,passed:0});t.tested+=1;if(e.result==="pass")t.passed+=1}break;
+      case"abx":{const a=abx[e.drug]||(abx[e.drug]={ddd:0,dot:0});a.ddd+=+e.ddd||0;a.dot+=+e.dot||0}break;
+    }
+  }
+  const T=blankWard();
+  for(const w of Object.values(W)){for(const k in T){if(k==="mdro")ORGS.forEach(o=>T.mdro[o]+=w.mdro[o]||0);else T[k]+=w[k]||0}}
+  const out={wards:W,total:T,abx,env,days:base.days||null};
+  aggCache.set(m,out);return out;
+}
+function met(x){
+  const t=TH();
+  return {hh:rate(x.hhCompliant,x.hhOpp,100),cauti:rate(x.cauti,x.ucDays,1000),clabsi:rate(x.clabsi,x.clDays,1000),vap:rate(x.vap,x.ventDays,1000),
+  ssi:rate(x.ssi,x.procedures,100),ucDU:rate(x.ucDays,x.patientDays,1),clDU:rate(x.clDays,x.patientDays,1),ventDU:rate(x.ventDays,x.patientDays,1),
+  dai:rate(x.cauti+x.clabsi+x.vap,x.ucDays+x.clDays+x.ventDays,1000),rx:rate(x.rxAppropriate,x.rxReviewed,100),mdroTotal:ORGS.reduce((s,o)=>s+(x.mdro[o]||0),0),nsi:x.nsi};
+}
+const prevMonths=(m,n)=>{const ms=months();const i=ms.indexOf(m);return ms.slice(Math.max(0,i-n),i)};
+function series(fn,upTo){const ms=months().filter(m=>!upTo||m<=upTo).slice(-12);return{ms,vals:ms.map(m=>fn(agg(m)))}}
+function ddd100(a){const pd=a.total.patientDays;let s=0;for(const d in a.abx)s+=a.abx[d].ddd||0;return rate(s,pd,100)}
+function dot1000(a){const pd=a.total.patientDays;let s=0;for(const d in a.abx)s+=a.abx[d].dot||0;return rate(s,pd,1000)}
+function sev(v,limit,higherBad=true){if(v==null)return"";if(higherBad){if(v>limit)return"bad";if(v>limit*.8)return"warn";return"good"}else{if(v<limit)return"bad";if(v<limit+5)return"warn";return"good"}}
+/* ---------- analysis ---------- */
+function wardRisk(m){
+  const a=agg(m),t=TH(),out=[];
+  for(const w of wardIds()){
+    const x=a.wards[w],k=met(x);let score=0;const why=[];
+    for(const h of HAI){const v=k[h.k];if(v!=null&&v>t[h.k]){score+=v/t[h.k];why.push(`${h.n} ${r1(v)} vs ${t[h.k]} target`)}}
+    if(k.ssi!=null&&k.ssi>t.ssi){score+=k.ssi/t.ssi;why.push(`SSI ${r1(k.ssi)}% vs ${t.ssi}%`)}
+    if(k.hh!=null&&k.hh<t.hhTarget){score+=(t.hhTarget-k.hh)/8;why.push(`hand hygiene ${r0(k.hh)}%`)}
+    if(x.hhOpp===0){score+=1;why.push("no hand hygiene audit this month")}
+    const hot=(x.mdro.CRE||0)+(x.mdro.CRAB||0);if(hot>=2){score+=hot*.5;why.push(`${hot} CRE/CRAB isolates`)}
+    out.push({w,score,why});
+  }
+  return out.sort((a,b)=>b.score-a.score);
+}
+function stats(arr){const v=arr.filter(x=>x!=null&&isFinite(x));if(!v.length)return null;const mean=v.reduce((s,x)=>s+x,0)/v.length;const sd=Math.sqrt(v.reduce((s,x)=>s+(x-mean)**2,0)/v.length);return{mean,sd,n:v.length}}
+function slope(vals){const pts=vals.map((v,i)=>[i,v]).filter(p=>p[1]!=null);if(pts.length<3)return null;const n=pts.length,sx=pts.reduce((s,p)=>s+p[0],0),sy=pts.reduce((s,p)=>s+p[1],0),sxy=pts.reduce((s,p)=>s+p[0]*p[1],0),sxx=pts.reduce((s,p)=>s+p[0]*p[0],0);const b=(n*sxy-sx*sy)/(n*sxx-sx*sx||1);const a=(sy-b*sx)/n;return{b,a,next:a+b*n}}
+const SIGNALS=[{k:"clabsi",n:"CLABSI rate",hb:true},{k:"cauti",n:"CAUTI rate",hb:true},{k:"vap",n:"VAP rate",hb:true},{k:"ssi",n:"SSI rate",hb:true},{k:"hh",n:"Hand hygiene",hb:false},{k:"CRE",n:"CRE isolates",hb:true,count:true},{k:"CRAB",n:"CRAB isolates",hb:true,count:true}];
+function sigVal(x,s){return s.count?(x.mdro[s.k]||0):met(x)[s.k]}
+function earlyWarnings(m){
+  const prev=prevMonths(m,6),t=TH(),out=[];
+  for(const w of wardIds()){
+    for(const s of SIGNALS){
+      const cur=sigVal(agg(m).wards[w],s);if(cur==null)continue;
+      const hist=prev.map(p=>sigVal(agg(p).wards[w],s));const st=stats(hist);if(!st||st.n<3)continue;
+      const trend=slope([...hist.slice(-3),cur]);
+      let flag=null,why="";
+      if(s.count){const lim=st.mean+2*Math.sqrt(Math.max(st.mean,.5));if(cur>=3&&cur>lim){flag="bad";why=`${cur} isolates vs usual ${r1(st.mean)} (alert above ${r1(lim)})`}}
+      else if(s.hb){const sd=Math.max(st.sd,st.mean*.25,.3);const lim=st.mean+2*sd;const th=t[s.k];
+        const cases=agg(m).wards[w][s.k]||0;if(cur>lim&&cases>=2){flag="bad";why=`${r1(cur)} vs usual ${r1(st.mean)} (alert above ${r1(lim)})`}
+        else if(trend&&trend.b>0&&trend.next>th&&cur>st.mean){flag="warn";why=`Rising; projected ${r1(trend.next)} next month vs ${th} target`}}
+      else{const sd=Math.max(st.sd,2);const lim=st.mean-2*sd;
+        if(cur<lim){flag="bad";why=`${r0(cur)}% vs usual ${r0(st.mean)}% (alert below ${r0(lim)}%)`}
+        else if(trend&&trend.b<-1&&trend.next<t.hhTarget){flag="warn";why=`Falling; projected ${r0(trend.next)}% next month`}}
+      if(flag)out.push({w,s,cur,st,trend,flag,why});
+    }
+  }
+  return out.sort((a,b)=>(a.flag===b.flag?0:a.flag==="bad"?-1:1));
+}
+const isOverdue=d=>d&&d<today();
+function policyDue(p){const d=new Date(p.lastReviewed+"T00:00:00");d.setMonth(d.getMonth()+(p.everyMonths||12));return d.toISOString().slice(0,10)}
+function alerts(m){
+  const a=agg(m),t=TH(),out=[],prev=prevMonths(m,3);
+  for(const w of wardIds()){
+    const x=a.wards[w],k=met(x),n=wardName(w);
+    for(const h of HAI){const v=k[h.k];if(v!=null&&v>t[h.k])out.push({sev:"bad",cat:"Infection rate",title:`${h.n} above target in ${n}`,detail:`${r1(v)} ${h.unit} (target ${t[h.k]}). ${x[h.k]} case${x[h.k]===1?"":"s"} this month.`,link:"surveillance"})}
+    if(k.ssi!=null&&k.ssi>t.ssi)out.push({sev:"bad",cat:"Infection rate",title:`SSI above target in ${n}`,detail:`${r1(k.ssi)}% of ${x.procedures} procedures (target ${t.ssi}%).`,link:"surveillance"});
+    [["ucDU","Urinary catheter"],["clDU","Central line"],["ventDU","Ventilator"]].forEach(([dk,dn])=>{if(k[dk]!=null&&k[dk]>t[dk])out.push({sev:"warn",cat:"Device use",title:`${dn} utilisation high in ${n}`,detail:`Ratio ${k[dk].toFixed(2)} (limit ${t[dk]}). Review device necessity daily.`,link:"surveillance"})});
+    for(const o of ["CRE","CRAB","VRE","MRSA"]){const cur=x.mdro[o]||0;const avg=prev.length?prev.reduce((s,p)=>s+(agg(p).wards[w].mdro[o]||0),0)/prev.length:0;if(cur>=2&&cur>=Math.max(avg,.67)*t.mdroRise)out.push({sev:o==="CRE"||o==="CRAB"?"bad":"warn",cat:"MDRO",title:`${o} rising in ${n}`,detail:`${cur} isolates this month vs ${r1(avg)} monthly average over the previous ${prev.length} months.`,link:"stewardship"})}
+    if(x.hhOpp===0)out.push({sev:"bad",cat:"Missed surveillance",title:`No hand hygiene audit in ${n}`,detail:`No observations recorded for ${mLabel(m)}.`,link:"record"});
+    else if(k.hh<t.hhTarget)out.push({sev:"warn",cat:"Hand hygiene",title:`Hand hygiene below target in ${n}`,detail:`${r0(k.hh)}% compliance (target ${t.hhTarget}%).`,link:"surveillance"});
+    if(prev.length&&x.hhOpp>0){const p=met(agg(prev[prev.length-1]).wards[w]).hh;if(p!=null&&k.hh!=null&&p-k.hh>=5)out.push({sev:"bad",cat:"Hand hygiene",title:`Hand hygiene dropped in ${n}`,detail:`${r0(p)}% last month to ${r0(k.hh)}% now.`,link:"surveillance"})}
+    if(k.rx!=null&&k.rx<t.rxTarget-10)out.push({sev:"warn",cat:"Stewardship",title:`Prescription appropriateness low in ${n}`,detail:`${r0(k.rx)}% of ${x.rxReviewed} audited prescriptions met policy.`,link:"stewardship"});
+  }
+  for(const [ek,en] of [["air","Air"],["water","Water"],["surface","Surface"]]){const e=a.env[ek];if(e&&e.tested&&e.passed/e.tested*100<t.envTarget)out.push({sev:"warn",cat:"Environment",title:`${en} samples failing`,detail:`${e.tested-e.passed} of ${e.tested} samples failed this month.`,link:"surveillance"})}
+  S.audits.filter(u=>u.status!=="done").forEach(u=>{if(isOverdue(u.due))out.push({sev:"bad",cat:"Overdue audit",title:u.title,detail:`Was due ${fmtDate(u.due)}.`,link:"accreditation"});else if(daysTo(u.due)<=7)out.push({sev:"info",cat:"Audit due",title:u.title,detail:`Due ${fmtDate(u.due)}.`,link:"accreditation"})});
+  S.policies.forEach(p=>{const d=policyDue(p);if(isOverdue(d))out.push({sev:"warn",cat:"Policy review",title:`${p.title} review overdue`,detail:`Review was due ${fmtDate(d)}.`,link:"accreditation"})});
+  S.actions.filter(c=>c.status!=="done"&&isOverdue(c.due)).forEach(c=>out.push({sev:"warn",cat:"Corrective action",title:`Overdue: ${c.title}`,detail:`${c.owner||"Unassigned"}, was due ${fmtDate(c.due)}.`,link:"accreditation"}));
+  const pend=S.ra.filter(r=>r.status==="pending").length;if(pend)out.push({sev:"info",cat:"Stewardship",title:`${pend} restricted antibiotic request${pend>1?"s":""} awaiting approval`,detail:"Review in the stewardship approvals queue.",link:"stewardship"});
+  out.forEach(a=>a.key=(m+"-"+a.cat+"-"+a.title).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,180));
+  const order={bad:0,warn:1,info:2};return out.sort((a,b)=>order[a.sev]-order[b.sev]);
+}
+function fmtDate(d){if(!d)return"–";const x=new Date(d+"T00:00:00");return x.getDate()+" "+MN[x.getMonth()]+" "+x.getFullYear()}
+function daysTo(d){return Math.round((new Date(d+"T00:00:00")-new Date(today()+"T00:00:00"))/864e5)}
+function agenda(m){
+  const items=[],al=alerts(m),ew=earlyWarnings(m);
+  al.filter(x=>x.sev==="bad"&&x.cat==="Infection rate").slice(0,3).forEach(x=>items.push(x.title+": "+x.detail));
+  al.filter(x=>x.cat==="MDRO").slice(0,2).forEach(x=>items.push(x.title+": "+x.detail));
+  ew.filter(e=>!/ rate$/.test(e.s.n)||e.flag==="warn").slice(0,2).forEach(e=>items.push(`Early warning, ${wardName(e.w)}: ${e.s.n}. ${e.why}`));
+  const hh=al.filter(x=>x.cat==="Hand hygiene"||x.cat==="Missed surveillance").slice(0,2);hh.forEach(x=>items.push(x.title+"."));
+  const ab=agg(m),pv=prevMonths(m,1)[0];if(pv){const c=ddd100(ab),p=ddd100(agg(pv));if(c&&p&&c>p*1.05)items.push(`Antibiotic consumption up ${r0((c/p-1)*100)}% to ${r1(c)} DDD per 100 patient-days.`)}
+  const open=S.actions.filter(c=>c.status!=="done");if(open.length)items.push(`Review ${open.length} open corrective action${open.length>1?"s":""} (${open.filter(c=>isOverdue(c.due)).length} overdue).`);
+  const au=al.filter(x=>x.cat==="Overdue audit");if(au.length)items.push(`Overdue audits: ${au.map(x=>x.title).join("; ")}.`);
+  return [...new Set(items)].slice(0,8);
+}
+/* ---------- ui helpers ---------- */
+const $=s=>document.querySelector(s);
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const charts={};
+function chart(id,cfg){
+  if(charts[id]){charts[id].destroy();delete charts[id]}
+  const el=document.getElementById(id);if(!el||!window.Chart)return;
+  const ink=cssv("--muted"),line=cssv("--line");
+  Chart.defaults.font.family=cssv("--body");Chart.defaults.color=ink;
+  cfg.options=Object.assign({responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+    plugins:{legend:{position:"bottom",labels:{boxWidth:12,boxHeight:12,useBorderRadius:true,borderRadius:3}}},
+    scales:{x:{grid:{display:false},border:{color:line}},y:{grid:{color:line},border:{display:false},beginAtZero:true}}},cfg.options||{});
+  charts[id]=new Chart(el,cfg);
+}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2600)}
+function monthSelect(){const ms=months();return `<label class="small muted">Reporting month <select id="monthSel">${ms.slice().reverse().map(m=>`<option value="${m}"${m===S.month?" selected":""}>${mLabel(m)}</option>`).join("")}</select></label>`}
+function topbar(title,sub,extra=""){return `<div class="topbar"><div><h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div><div class="ctrls">${extra}${months().length?monthSelect():""}</div></div>`}
+function wardOptions(sel,all){return (all?`<option value="">All wards</option>`:"")+wardIds().map(w=>`<option value="${w}"${w===sel?" selected":""}>${esc(wardName(w))}</option>`).join("")}
+function delta(cur,prev,higherBad,fmt=r1,suffix=""){if(cur==null||prev==null)return"";const d=cur-prev;if(Math.abs(d)<.05)return`<div class="d muted">No change vs last month</div>`;const up=d>0;const cls=up?(higherBad?"up-bad":"up-good"):(higherBad?"down-good":"down-bad");return `<div class="d ${cls}">${up?"▲":"▼"} ${fmt(Math.abs(d))}${suffix} vs last month</div>`}
+
+/* ---------- router ---------- */
+const PAGES={};
+let current="overview";
+function route(){
+  const h=(location.hash||"").replace("#","");
+  current=PAGES[h]?h:"overview";
+  document.querySelectorAll("nav.side a").forEach(a=>{if(a.dataset.r===current)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  render(true);
+}
+let renderQueued=false;
+function scheduleRender(){if(renderQueued)return;renderQueued=true;requestAnimationFrame(()=>{renderQueued=false;render(false)})}
+const formState={};
+function render(scrollTop){
+  aggCache.clear();
+  const ms=months();
+  if(!S.month||!ms.includes(S.month))S.month=ms[ms.length-1]||null;
+  const n=S.month?alerts(S.month).filter(a=>a.sev==="bad"&&alertStatus(a).status==="new").length:0;const ac=$("#alertCount");ac.hidden=!n;ac.textContent=n;
+  const rq=S.month?reviewQueue(S.month).total:0;const rc=$("#reviewCount");rc.hidden=!rq;rc.textContent=rq;
+  const main=$("#main");
+  // keep typed values in an open form across live updates
+  if(!S.skipCapture)main.querySelectorAll("form.entry [name]").forEach(i=>{formState[i.form.id+":"+i.name]=i.type==="checkbox"?i.checked:i.value});S.skipCapture=false;
+  const ready=S.loaded.has("monthly")&&S.loaded.has("wards");
+  if(!S.db&&S.dbChecked){main.innerHTML=`<div class="empty"><h2>Can’t reach the server</h2><p>Start the backend with <b>python app.py</b> in the backend folder, then open http://localhost:8000.</p></div>`;return}
+  if(!ready){main.innerHTML=`<div class="empty">Loading surveillance data…</div>`;return}
+  if(!wardIds().length){main.innerHTML=topbar("Infection Prevention Intelligence","")+`<div class="panel empty"><h2>No wards set up yet</h2><p style="margin:8px 0 14px">Add the wards you survey to start recording data.</p>${wardAdder()}</div>`;bindWardAdder();return}
+  main.innerHTML=PAGES[current].html();
+  PAGES[current].after?.();
+  bindInline();
+  main.querySelectorAll("form.entry [name]").forEach(i=>{const k=i.form.id+":"+i.name;if(k in formState){if(i.type==="checkbox")i.checked=formState[k];else i.value=formState[k]}});
+  main.querySelectorAll("form.entry").forEach(f=>f.dispatchEvent(new Event("input")));
+  const sel=$("#monthSel");if(sel)sel.onchange=()=>{S.month=sel.value;render(false)};
+  if(scrollTop)window.scrollTo(0,0);
+}
+function wardAdder(){return `<form id="wardAdd" class="entry" style="max-width:640px;margin:0 auto;text-align:left"><label>Ward name<input name="name" required></label><label>Type<select name="type"><option value="icu">ICU</option><option value="ward">General ward</option></select></label><label>Beds<input name="beds" type="number" min="1" required></label><div class="actions"><button class="btn primary">Add ward</button></div></form>`}
+function bindWardAdder(){const f=$("#wardAdd");if(!f)return;f.onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));const id=d.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)||("w"+Date.now());try{await S.db.collection("wards").doc(id).set({name:d.name,type:d.type,beds:+d.beds});f.reset();toast("Ward added")}catch(err){writeErr(err)}}}
+function writeErr(err){if(err?.code==="invalid_argument"&&!S.canWrite){toast("You have view-only access to this record.")}else if(err?.code==="quota_exceeded")toast("Storage is full. Delete old records to add new ones.");else toast("Couldn’t save. Try again in a moment.");console.error(err)}
+
+/* ---------- overview ---------- */
+PAGES.overview={html(){
+  const m=S.month,a=agg(m),k=met(a.total),t=TH(),pv=prevMonths(m,1)[0],pk=pv?met(agg(pv).total):{};
+  const risks=wardRisk(m),top=risks[0];
+  // Q2 hand hygiene decline
+  const prev3=prevMonths(m,3);let worst=null;const missed=[];
+  for(const w of wardIds()){const x=a.wards[w];if(x.hhOpp===0){missed.push(wardName(w));continue}const cur=met(x).hh;const ps=prev3.map(p=>met(agg(p).wards[w]).hh).filter(v=>v!=null);if(!ps.length)continue;const avg=ps.reduce((s,v)=>s+v,0)/ps.length;const d=cur-avg;if(!worst||d<worst.d)worst={w,d,cur,avg}}
+  // Q3 CRE
+  const cre=a.total.mdro.CRE||0;const p6=prevMonths(m,6);const creAvg=p6.length?p6.reduce((s,p)=>s+(agg(p).total.mdro.CRE||0),0)/p6.length:null;
+  const creByWard=wardIds().map(w=>[w,a.wards[w].mdro.CRE||0]).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
+  const creSev=creAvg!=null&&cre>=creAvg*t.mdroRise&&cre>=3?"bad":cre>(creAvg||0)?"warn":"good";
+  // Q4 CLABSI
+  const cl=k.clabsi;const tr=slope(series(x=>met(x.total).clabsi,m).vals.slice(-4));
+  let q4v,q4s;if(cl==null){q4v="Not enough data";q4s="info"}else if(cl>t.clabsi){q4v="Yes, on current pace";q4s="bad"}else if(cl>t.clabsi*.8||(tr&&tr.next>t.clabsi)){q4v="Possibly";q4s="warn"}else{q4v="Unlikely";q4s="good"}
+  const clWards=wardIds().filter(w=>{const v=met(a.wards[w]).clabsi;return v!=null&&v>t.clabsi});
+  const ag=agenda(m);
+  const isDemo=S.loaded.has("monthly")&&Object.keys(S.monthly).length>0;
+  const rq=reviewQueue(m);const needs=[rq.cases.length&&`${rq.cases.length} infection case${rq.cases.length>1?"s":""} awaiting review`,rq.unver.length&&`${rq.unver.length} record${rq.unver.length>1?"s":""} not yet verified`,rq.comp.gaps&&`${rq.comp.gaps} completeness gap${rq.comp.gaps>1?"s":""}`,rq.dup.length&&`${rq.dup.length} possible duplicate${rq.dup.length>1?"s":""}`].filter(Boolean);
+  const newAl=alerts(m).filter(x=>x.sev==="bad"&&alertStatus(x).status==="new").length;
+  return topbar(`Briefing for ${mLabel(m)}`,`${wardIds().length} wards under surveillance`)+
+  (needs.length||newAl?`<div class="panel" style="margin-bottom:18px;display:flex;gap:10px 18px;flex-wrap:wrap;align-items:center;padding:14px 20px"><b>Needs attention</b><span class="muted">${[...needs,newAl&&`${newAl} urgent alert${newAl>1?"s":""} not yet acknowledged`].filter(Boolean).join("; ")}.</span><span style="margin-left:auto;display:flex;gap:8px">${needs.length?`<a class="btn small" style="text-decoration:none" href="#review">Review data</a>`:""}${newAl?`<a class="btn small" style="text-decoration:none" href="#alerts">Open alerts</a>`:""}</span></div>`:"")+
+  (isDemo?`<div class="demo">The figures here are demo data for a sample hospital. Anything you record is added on top of it, so you can see how a real month would update.</div>`:"")+
+  `<section class="briefing" aria-label="Briefing">
+   <div class="q lead ${top&&top.score>0?"bad":"good"}"><div class="bar"></div><div class="body"><div class="ask">Where is our biggest infection risk today?</div><div><div class="verdict">${top&&top.score>0?esc(wardName(top.w)):"No ward is over its thresholds"}</div>${top&&top.score>0?`<ul>${top.why.map(y=>`<li>${esc(y)}</li>`).join("")}</ul>${risks[1]&&risks[1].score>0?`<p class="detail">Next highest: ${risks.slice(1,3).filter(r=>r.score>0).map(r=>esc(wardName(r.w))).join(" and ")}.</p>`:""}`:""}</div></div></div>
+   <div class="q ${worst&&worst.d<=-3?"warn":missed.length?"warn":"good"}"><div class="bar"></div><div class="body"><div class="ask">Which ward is declining in hand hygiene compliance?</div><div><div class="verdict">${worst&&worst.d<=-3?`${esc(wardName(worst.w))}, down ${r0(-worst.d)} points`:"No ward is declining"}</div><p class="detail">${worst&&worst.d<=-3?`${r0(worst.cur)}% this month, against an average of ${r0(worst.avg)}% over the previous three months.`:"Every audited ward is holding within 3 points of its recent average."}${missed.length?` No audit recorded yet for ${missed.map(esc).join(", ")}.`:""}</p></div></div></div>
+   <div class="q ${creSev}"><div class="bar"></div><div class="body"><div class="ask">Carbapenem-resistant Enterobacteriaceae this month</div><div><div class="verdict">${cre} isolate${cre===1?"":"s"}${creAvg?`, ${creAvg>0?r1(cre/creAvg)+"× usual":"none usually"}`:""}</div><p class="detail">${creByWard.length?creByWard.map(([w,c])=>`${esc(wardName(w))} ${c}`).join(", ")+".":"None reported."}${creAvg!=null?` Six-month average: ${r1(creAvg)} a month.`:""}</p></div></div></div>
+   <div class="q ${q4s}"><div class="bar"></div><div class="body"><div class="ask">Are we likely to exceed the CLABSI benchmark?</div><div><div class="verdict">${q4v}</div><p class="detail">${cl!=null?`Hospital rate ${r1(cl)} per 1,000 central-line days against a benchmark of ${t.clabsi}.`:""}${tr?` The four-month trend is ${tr.b>0.05?"rising":tr.b<-0.05?"falling":"flat"}.`:""}${clWards.length?` Above benchmark: ${clWards.map(w=>`${esc(wardName(w))} (${r1(met(a.wards[w]).clabsi)})`).join(", ")}.`:""}</p></div></div></div>
+   <div class="q info"><div class="bar"></div><div class="body"><div class="ask">What should the infection control committee discuss this month?</div><div>${ag.length?`<ul>${ag.slice(0,5).map(i=>`<li>${esc(i)}</li>`).join("")}</ul>`:`<p class="detail">Nothing urgent this month.</p>`}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${S.sample?`<button class="btn small primary" id="aiAgenda">Draft the agenda with Claude</button>`:""}<a class="btn small" href="#reports" style="text-decoration:none;display:inline-flex;align-items:center">Open the monthly report</a></div><div id="aiAgendaOut"></div></div></div></div>
+  </section>
+  <div class="kpis">
+   <div class="kpi"><div class="l">Hand hygiene compliance</div><div class="v">${r0(k.hh)}%</div>${delta(k.hh,pk.hh,false,r1," points")}</div>
+   <div class="kpi"><div class="l">Device-associated HAI rate</div><div class="v">${r1(k.dai)}</div><div class="l">per 1,000 device-days</div>${delta(k.dai,pk.dai,true)}</div>
+   <div class="kpi"><div class="l">Antibiotic consumption</div><div class="v">${r1(ddd100(a))}</div><div class="l">DDD per 100 patient-days</div>${pv?delta(ddd100(a),ddd100(agg(pv)),true):""}</div>
+   <div class="kpi"><div class="l">MDRO isolates</div><div class="v">${k.mdroTotal}</div>${pv?delta(k.mdroTotal,pk.mdroTotal,true,r0):""}</div>
+   <div class="kpi"><div class="l">High-risk units</div><div class="v">${risks.filter(r=>r.score>=2).length}</div><div class="l">of ${wardIds().length} wards</div></div>
+   <div class="kpi"><div class="l">Open corrective actions</div><div class="v">${S.actions.filter(c=>c.status!=="done").length}</div><div class="d ${S.actions.some(c=>c.status!=="done"&&isOverdue(c.due))?"up-bad":"muted"}">${S.actions.filter(c=>c.status!=="done"&&isOverdue(c.due)).length} overdue</div></div>
+  </div>
+  <div class="grid2">
+   <div class="panel"><div class="ph"><h2>Hospital-acquired infection trends</h2><p>Per 1,000 device-days</p></div><div class="chartbox"><canvas id="cHai"></canvas></div></div>
+   <div class="panel"><div class="ph"><h2>Hand hygiene compliance</h2><p>Target ${t.hhTarget}%</p></div><div class="chartbox"><canvas id="cHH"></canvas></div></div>
+  </div>
+  <div class="grid2" style="margin-top:18px">
+   <div class="panel"><div class="ph"><h2>Resistance trends</h2><p>Isolates per month</p></div><div class="chartbox"><canvas id="cMdro"></canvas></div></div>
+  </div>
+  <div class="panel" style="margin-top:18px"><div class="ph"><h2>Ward risk ranking</h2><p>${mLabel(m)}</p></div><div class="tablewrap"><table><thead><tr><th>Ward</th><th class="num">Hand hygiene</th><th class="num">CAUTI</th><th class="num">CLABSI</th><th class="num">VAP</th><th class="num">CRE + CRAB</th></tr></thead><tbody>${risks.map(r=>{const x=a.wards[r.w],q=met(x);return `<tr><td>${esc(wardName(r.w))}${r.score>=2?` <span class="pill bad">High risk</span>`:""}</td><td class="num ${x.hhOpp?"cell-"+sev(q.hh,t.hhTarget,false):"cell-bad"}">${x.hhOpp?r0(q.hh)+"%":"No audit"}</td>${HAI.map(h=>`<td class="num ${q[h.k]!=null?"cell-"+sev(q[h.k],t[h.k]):""}">${r1(q[h.k])}</td>`).join("")}<td class="num">${(x.mdro.CRE||0)+(x.mdro.CRAB||0)}</td></tr>`}).join("")}</tbody></table></div></div>`;
+},after(){
+  const m=S.month,t=TH();
+  const s=series(a=>a,m);const labels=s.ms.map(mShort);
+  const cols=[cssv("--violet"),cssv("--pink"),cssv("--warn")];
+  chart("cHai",{type:"line",data:{labels,datasets:HAI.map((h,i)=>({label:h.n,data:s.vals.map(a=>met(a.total)[h.k]),borderColor:cols[i],backgroundColor:cols[i],tension:.25,pointRadius:2}))}});
+  chart("cHH",{type:"line",data:{labels,datasets:[{label:"Compliance %",data:s.vals.map(a=>met(a.total).hh),borderColor:cssv("--violet"),backgroundColor:cssv("--violet"),tension:.25,pointRadius:2},{label:"Target",data:labels.map(()=>t.hhTarget),borderColor:cssv("--muted"),borderDash:[5,4],pointRadius:0,borderWidth:1.5}]},options:{scales:{y:{suggestedMin:50,max:100,grid:{color:cssv("--line")}},x:{grid:{display:false}}}}});
+  const oc=[cssv("--pink"),cssv("--violet"),cssv("--warn"),cssv("--good"),cssv("--bad")];
+  chart("cMdro",{type:"bar",data:{labels,datasets:ORGS.map((o,i)=>({label:o,data:s.vals.map(a=>a.total.mdro[o]||0),backgroundColor:oc[i],borderRadius:2}))},options:{scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:cssv("--line")}}}}});
+  const b=$("#aiAgenda");if(b)b.onclick=()=>askClaude(b,$("#aiAgendaOut"),agendaPrompt(m));
+}};
+/* ---------- record ---------- */
+const W={name:"ward",label:"Ward",type:"ward"},D={name:"date",label:"Date",type:"date"};
+const PREF={name:"patientRef",label:"Patient reference (IP number)",type:"text",placeholder:"e.g. IP-24811",req:false};
+const RX_CRIT=[{k:"indication",n:"Indication documented",short:"no documented indication"},{k:"culture",n:"Culture sent before the first dose",short:"no culture before starting",na:true},{k:"dose",n:"Dose correct for weight and renal function",short:"incorrect dose"},{k:"route",n:"Route appropriate",short:"inappropriate route"},{k:"duration",n:"Duration or stop date set",short:"no stop date"},{k:"deesc",n:"Reviewed and de-escalated at 48 to 72 hours",short:"no 48 to 72 hour review",na:true}];
+const DRUGS=["Meropenem","Piperacillin-tazobactam","Ceftriaxone","Vancomycin","Colistin","Amikacin","Linezolid","Other"];
+const FORMS=[
+ {id:"hh",title:"Hand hygiene audit",desc:"Opportunities observed and compliant actions, by ward and shift",src:"Ward observation",fields:[W,D,{name:"shift",label:"Shift",type:"select",options:["Morning","Evening","Night"]},{name:"observer",label:"Observer",type:"text",placeholder:"Name of the person observing"},{name:"staff",label:"Staff group observed",type:"select",options:["Mixed","Nurses","Doctors","Technicians","Housekeeping"]},{name:"opp",label:"Opportunities observed",type:"number"},{name:"compliant",label:"Compliant actions",type:"number"}],
+  check:d=>+d.compliant>+d.opp?"Compliant actions can’t exceed opportunities.":null,calc:d=>+d.opp>0?`Compliance for this audit: <b>${r0(+d.compliant/+d.opp*100)}%</b> (compliant ÷ opportunities × 100)`:""},
+ {id:"census",title:"Daily device census",desc:"Patients and device-days that every infection rate depends on",src:"Ward census",fields:[W,D,{name:"patients",label:"Patients on ward",type:"number"},{name:"uc",label:"Urinary catheters",type:"number"},{name:"cl",label:"Central lines",type:"number"},{name:"vent",label:"Ventilated patients",type:"number"}],
+  check:d=>["uc","cl","vent"].some(k=>+d[k]>+d.patients)?"Device counts can’t exceed patients on the ward.":null,calc:d=>+d.patients>0?`Device utilisation today: catheter ${(+d.uc/+d.patients).toFixed(2)}, central line ${(+d.cl/+d.patients).toFixed(2)}, ventilator ${(+d.vent/+d.patients).toFixed(2)}`:""},
+ {id:"hai",title:"Infection case",desc:"A possible or confirmed CAUTI, CLABSI, VAP or SSI. Only confirmed cases count in rates.",src:"ICN case review",fields:[W,D,{name:"type",label:"Infection type",type:"select",options:[["cauti","CAUTI"],["clabsi","CLABSI"],["vap","VAP"],["ssi","SSI"]]},{name:"status",label:"Case classification",type:"select",options:[["suspected","Suspected"],["review","Under review"],["confirmed","Confirmed"],["excluded","Excluded"]]},PREF,{name:"labRef",label:"Lab report or accession number",type:"text",req:false},{name:"organism",label:"Organism, if known",type:"text",req:false},{name:"notes",label:"Criteria met",type:"textarea",req:false}],
+  calc:d=>d.status==="confirmed"?"This case will be counted in the infection rate as soon as it is saved.":d.status==="excluded"?"Excluded cases are kept on record but never counted.":"This case goes to the review queue and is not counted until someone confirms it."},
+ {id:"proc",title:"Surgical procedures",desc:"Number of operations, the denominator for SSI",src:"OT register",fields:[W,D,{name:"count",label:"Procedures performed",type:"number"},{name:"category",label:"Category",type:"select",options:["Clean","Clean-contaminated","Contaminated","Mixed"]}]},
+ {id:"nsi",title:"Needle-stick injury",desc:"A sharps or splash exposure in a staff member",src:"Staff report",fields:[W,D,{name:"staff",label:"Staff group",type:"select",options:["Nurse","Doctor","Technician","Housekeeping","Student"]},{name:"device",label:"Device involved",type:"text"},{name:"pep",label:"Post-exposure prophylaxis started",type:"checkbox",req:false}]},
+ {id:"isolate",title:"MDRO isolate",desc:"A resistant organism reported by the microbiology lab",src:"Lab report",fields:[W,D,{name:"org",label:"Resistance type",type:"select",options:ORGS.map(o=>[o,o+": "+ORG_NAMES[o]])},{name:"specimen",label:"Specimen",type:"select",options:["Blood","Urine","Respiratory","Wound / pus","Screening swab","Other"]},PREF]},
+ {id:"rxaudit",title:"Prescription audit",desc:"One antibiotic prescription checked against hospital policy",src:"Pharmacy / AMS round",fields:[W,D,PREF,{name:"drug",label:"Antibiotic",type:"select",options:DRUGS},
+  ...RX_CRIT.map(c=>({name:c.k,label:c.n,type:"select",options:c.na?["Yes","No","Not applicable"]:["Yes","No"]})),
+  {name:"outcome",label:"Review outcome",type:"select",options:["Appropriate","Needs change","Inappropriate"]},{name:"notes",label:"Advice given",type:"textarea",req:false}],
+  derive:d=>({reviewed:1,appropriate:d.outcome==="Appropriate"?1:0}),calc:d=>{const no=RX_CRIT.filter(c=>d[c.k]==="No").map(c=>c.short);return no.length?`Gaps found: ${no.join(", ")}.`:"No gaps against policy so far."}},
+ {id:"abx",title:"Antibiotic consumption",desc:"Defined daily doses and days of therapy from pharmacy",src:"Pharmacy report",fields:[{name:"ward",label:"Ward",type:"ward"},D,{name:"drug",label:"Antibiotic",type:"select",options:DRUGS},{name:"ddd",label:"DDD dispensed",type:"number",step:"0.1"},{name:"dot",label:"Days of therapy",type:"number"}]},
+ {id:"env",title:"Environmental sample",desc:"Air, water or surface result against its acceptance limit",src:"Environmental surveillance",fields:[D,{name:"type",label:"Sample type",type:"select",options:[["air","Air"],["water","Water"],["surface","Surface"]]},{name:"location",label:"Location",type:"text",placeholder:"e.g. OT-3, RO plant"},{name:"method",label:"Test method",type:"select",options:["Settle plate","Active air sampler","Heterotrophic plate count","Coliform count","Endotoxin","Surface swab","Contact plate"]},{name:"value",label:"Reading",type:"number",step:"0.1"},{name:"unit",label:"Unit",type:"select",options:["CFU/m³","CFU/plate","CFU/mL","CFU/100 mL","EU/mL","CFU/25 cm²"]},{name:"limit",label:"Acceptance limit (at or below)",type:"number",step:"0.1"},{name:"organism",label:"Organism, if grown",type:"text",req:false}],
+  derive:d=>({result:+d.value<=+d.limit?"pass":"fail"}),calc:d=>d.value!==""&&d.limit!==""&&d.value!=null&&d.limit!=null?(+d.value<=+d.limit?`<b style="color:var(--good)">Acceptable</b>: ${d.value} ${esc(d.unit)} is within the limit of ${d.limit}.`:`<b style="color:var(--bad)">Not acceptable</b>: ${d.value} ${esc(d.unit)} is above the limit of ${d.limit}. Add a corrective action after saving.`):"Enter the reading and the limit to see the result."},
+ {id:"ra",title:"Restricted antibiotic request",desc:"Ask the stewardship team to approve a reserve drug",src:"Treating doctor",fields:[W,D,PREF,{name:"drug",label:"Antibiotic",type:"select",options:DRUGS},{name:"requestedBy",label:"Requested by",type:"text"},{name:"indication",label:"Indication and culture result",type:"textarea"}]},
+ {id:"action",title:"Corrective action",desc:"Something to fix, with an owner and a due date",src:"IPC team",fields:[{name:"ward",label:"Ward",type:"ward",req:false},{name:"title",label:"Action",type:"text"},{name:"owner",label:"Owner",type:"text"},{name:"due",label:"Due date",type:"date"},{name:"source",label:"Triggered by",type:"text",req:false}]},
+];
+function fieldHtml(f){
+  const req=f.req===false?"":" required";
+  let inp;
+  if(f.type==="ward")inp=`<select name="${f.name}"${req}>${f.req===false?`<option value="">Hospital-wide</option>`:""}${wardOptions(null)}</select>`;
+  else if(f.type==="select")inp=`<select name="${f.name}"${req}>${f.options.map(o=>Array.isArray(o)?`<option value="${o[0]}">${esc(o[1])}</option>`:`<option>${esc(o)}</option>`).join("")}</select>`;
+  else if(f.type==="textarea")inp=`<textarea name="${f.name}"${req}></textarea>`;
+  else if(f.type==="checkbox")return `<label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" name="${f.name}" style="min-height:auto"> ${f.label}</label>`;
+  else inp=`<input name="${f.name}" type="${f.type}"${f.type==="number"?` min="0" step="${f.step||1}" inputmode="decimal"`:""}${f.type==="date"?` value="${today()}" max="${today()}"`:""}${f.placeholder?` placeholder="${esc(f.placeholder)}"`:""}${req}>`;
+  return `<label class="${f.type==="textarea"?"wide":""}">${f.label}${inp}</label>`;
+}
+let openForm=null,editId=null;
+/* inline action forms (used instead of browser prompts) */
+let inline=null;const INLINE={};
+const nowISO=()=>new Date().toISOString();
+function inlineOpenBtn(kind,id,label,primary){return `<button class="btn small${primary?" primary":""}" data-inl="${kind}|${esc(id)}">${label}</button>`}
+function inlineForm(kind,id,fields,submit){if(!inline||inline.kind!==kind||inline.id!==id)return"";return `<form class="entry inl" id="inl-${kind}" data-ik="${kind}" data-iid="${esc(id)}" style="width:100%;margin-top:4px">${fields}<div class="actions"><button class="btn small primary">${submit}</button><button type="button" class="btn small" data-icancel>Cancel</button><span class="small" data-ierr style="color:var(--bad)"></span></div></form>`}
+function bindInline(){
+  document.querySelectorAll("[data-inl]").forEach(b=>b.onclick=()=>{const[k,...r]=b.dataset.inl.split("|");inline={kind:k,id:r.join("|")};Object.keys(formState).filter(x=>x.startsWith("inl-")).forEach(x=>delete formState[x]);render(false)});
+  document.querySelectorAll("[data-icancel]").forEach(b=>b.onclick=()=>{inline=null;render(false)});
+  document.querySelectorAll("form.inl").forEach(f=>f.onsubmit=async e=>{e.preventDefault();if(!f.checkValidity()){f.reportValidity();return}const btn=f.querySelector("button.primary");btn.disabled=true;
+    try{const msg=await INLINE[f.dataset.ik](f.dataset.iid,Object.fromEntries(new FormData(f)));if(msg){f.querySelector("[data-ierr]").textContent=msg;btn.disabled=false;return}Object.keys(formState).filter(x=>x.startsWith("inl-")).forEach(x=>delete formState[x]);inline=null;render(false)}catch(x){writeErr(x);btn.disabled=false}});
+}
+async function entryUpdate(id,patch,action,note,before){const e=S.entries.find(x=>x.id===id);const h={at:nowISO(),by:S.uid||null,action,note:note||""};if(before)h.before=before;await S.db.collection("entries").doc(id).update({...patch,history:[...(e?.history||[]),h]})}
+INLINE.void=async(id,d)=>{await entryUpdate(id,{voided:true,voidReason:d.reason},"Voided",d.reason);toast("Record voided. It stays in the audit trail but no longer counts.")};
+const STATUS_LBL={suspected:"Suspected",review:"Under review",confirmed:"Confirmed",excluded:"Excluded"};
+function entryPills(e){const p=[];if(e.kind==="hai")p.push(`<span class="pill ${e.status==="confirmed"||!e.status?"bad":e.status==="excluded"?"mute":"warn"}">${STATUS_LBL[e.status||"confirmed"]}</span>`);
+  if(e.kind!=="hai")p.push(e.verifiedAt?`<span class="pill good">Verified</span>`:`<span class="pill mute">Not verified</span>`);
+  if(e.history?.some(h=>h.action==="Corrected"))p.push(`<span class="pill info">Corrected</span>`);return p.join(" ")}
+function historyHtml(h){if(!h?.length)return"";return `<details class="small muted" style="margin-top:4px"><summary>History (${h.length})</summary><ul style="margin:4px 0;padding-left:18px">${h.map(x=>`<li>${fmtDate(x.at.slice(0,10))}: ${esc(x.action)} by ${esc(nameOf(x.by))}${x.note?`. “${esc(x.note)}”`:""}${x.before?`. Before: ${esc(Object.entries(x.before).map(([k,v])=>k+" "+v).join(", "))}`:""}</li>`).join("")}</ul></details>`}
+const nameOf=id=>!id?"someone":id===S.uid?"you":(S.names[id]||"a colleague");
+function startCorrection(e){openForm=e.kind;editId=e.id;const f=FORMS.find(x=>x.id===e.kind);Object.keys(formState).filter(k=>k.startsWith("f-"+e.kind+":")).forEach(k=>delete formState[k]);
+  f.fields.forEach(x=>{formState["f-"+e.kind+":"+x.name]=x.type==="checkbox"?!!e[x.name]:(e[x.name]??"")});S.skipCapture=true;render(false);setTimeout(()=>$("#formPanel")?.scrollIntoView({behavior:"smooth",block:"start"}),30)}
+PAGES.record={html(){
+  const f=FORMS.find(x=>x.id===openForm);const ed=editId&&S.entries.find(x=>x.id===editId);if(editId&&!ed)editId=null;
+  const recent=S.entries.filter(e=>!e.voided).sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||"")).slice(0,15);
+  return topbar("Record data","Enter observations from the ward on a phone or tablet. Rates and alerts update as soon as you save.")+
+  (!S.canWrite?`<div class="demo">You have view-only access, so you can look but not record.</div>`:"")+
+  `<div class="tiles">${FORMS.map(x=>`<button class="tile" data-form="${x.id}" aria-pressed="${x.id===openForm}"><b>${x.title}</b><span>${x.desc}</span><span class="src">${x.src}</span></button>`).join("")}<button class="tile" data-form="csv" aria-pressed="${openForm==="csv"}"><b>Import lab results</b><span>Upload a CSV of MDRO isolates from the microbiology lab</span><span class="src">Lab report upload</span></button></div>`+
+  (f?`<div class="panel" style="margin-top:18px" id="formPanel"><div class="ph"><h2>${editId?"Correct: ":""}${f.title}</h2><button class="btn small" id="closeForm">${editId?"Cancel correction":"Close"}</button></div>${editId?`<p class="small muted" style="margin-bottom:8px">The original values are kept in the record’s history. A corrected record needs to be verified again.</p>`:""}<form class="entry" id="f-${f.id}" novalidate>${f.fields.map(fieldHtml).join("")}${editId?`<label class="wide">Reason for correction<input name="_reason" required></label>`:""}<div class="calc" id="calc" ${f.calc?"":"hidden"}></div><div class="actions"><button class="btn primary" ${S.canWrite?"":"disabled"}>${editId?"Save correction":"Save "+f.title.toLowerCase()}</button><span class="small" id="formErr" style="color:var(--bad)"></span></div></form></div>`:"")+
+  (openForm==="csv"?csvPanel():"")+
+  `<div class="panel" style="margin-top:18px"><div class="ph"><h2>Recently recorded</h2><p>${S.entries.filter(e=>!e.voided).length} records added through this app${S.entries.some(e=>e.voided)?`, ${S.entries.filter(e=>e.voided).length} voided`:""}</p></div>${recent.length?`<ul class="list">${recent.map(e=>`<li><div class="main"><b>${esc(entryTitle(e))}</b> ${entryPills(e)}<div class="small muted">${esc(e.ward?wardName(e.ward):"Hospital-wide")}, ${fmtDate(e.date)}, recorded by ${esc(nameOf(e.by))}</div>${historyHtml(e.history)}</div>${S.canWrite?`<div class="ctrls"><button class="btn small" data-fix="${e.id}">Correct</button>${inlineOpenBtn("void",e.id,"Void")}</div>`:""}${inlineForm("void",e.id,`<label class="wide">Why is this record being voided?<input name="reason" required placeholder="e.g. duplicate, wrong ward"></label>`,"Void record")}</li>`).join("")}</ul>`:`<p class="empty">Nothing recorded yet. Pick a form above to add the first entry.</p>`}</div>`;
+},after(){
+  document.querySelectorAll("[data-form]").forEach(b=>b.onclick=()=>{openForm=openForm===b.dataset.form?null:b.dataset.form;editId=null;render(false);setTimeout(()=>$("#formPanel")?.scrollIntoView({behavior:"smooth",block:"start"}),30)});
+  const c=$("#closeForm");if(c)c.onclick=()=>{if(editId)Object.keys(formState).filter(k=>k.startsWith("f-"+openForm+":")).forEach(k=>delete formState[k]);openForm=null;editId=null;render(false)};
+  document.querySelectorAll("[data-fix]").forEach(b=>b.onclick=()=>startCorrection(S.entries.find(x=>x.id===b.dataset.fix)));
+  const f=FORMS.find(x=>x.id===openForm),form=f&&$("#f-"+f.id);
+  if(form){
+    form.oninput=()=>{const d=Object.fromEntries(new FormData(form));const c=$("#calc");if(f.calc&&c)c.innerHTML=f.calc(d)||"Fill in the numbers to see the result.";};
+    form.onsubmit=async e=>{e.preventDefault();const err=$("#formErr");
+      if(!form.checkValidity()){err.textContent="Fill in the highlighted fields.";form.reportValidity();return}
+      const d=Object.fromEntries(new FormData(form));f.fields.forEach(x=>{if(x.type==="checkbox")d[x.name]=!!form.elements[x.name].checked;if(x.type==="number"&&d[x.name]!=="")d[x.name]=+d[x.name]});
+      const msg=f.check&&f.check(d);if(msg){err.textContent=msg;return}
+      if(f.derive)Object.assign(d,f.derive(d));
+      const reason=d._reason;delete d._reason;
+      err.textContent="";const btn=form.querySelector("button.primary");btn.disabled=true;
+      try{
+        if(editId){const old=S.entries.find(x=>x.id===editId);const before={};for(const k in d)if(String(old[k]??"")!==String(d[k]??""))before[k]=old[k]??"";
+          if(!Object.keys(before).length){err.textContent="Nothing has changed.";btn.disabled=false;return}
+          await entryUpdate(editId,{...d,month:(d.date||old.date).slice(0,7),verifiedBy:null,verifiedAt:null},"Corrected",reason,before);
+          toast("Correction saved. The original values are in the history.");
+        }
+        else if(f.id==="ra")await S.db.collection("ra").add({...d,status:"pending",createdAt:nowISO(),by:S.uid||null});
+        else if(f.id==="action")await S.db.collection("actions").add({...d,status:"open",created:today(),by:S.uid||null});
+        else await S.db.collection("entries").add({kind:f.id,...d,month:(d.date||today()).slice(0,7),createdAt:nowISO(),by:S.uid||null,history:[{at:nowISO(),by:S.uid||null,action:"Recorded",note:""}]});
+        Object.keys(formState).filter(k=>k.startsWith(form.id+":")).forEach(k=>delete formState[k]);
+        if(editId){editId=null;openForm=null;render(false);return}
+        form.reset();form.querySelectorAll('input[type=date]').forEach(i=>i.value=today());form.dispatchEvent(new Event("input"));
+        toast(f.id==="ra"?"Request sent for approval":f.id==="action"?"Corrective action added":f.id==="hai"&&d.status!=="confirmed"&&d.status!=="excluded"?"Case saved and sent for review":`${f.title} saved`);
+      }catch(x){writeErr(x)}finally{btn.disabled=!S.canWrite}
+    };
+  }
+  bindCsv();
+}};
+function entryTitle(e){const f=FORMS.find(x=>x.id===e.kind);switch(e.kind){
+  case"hh":return`Hand hygiene audit${e.shift?", "+e.shift.toLowerCase()+" shift":""}: ${e.compliant} of ${e.opp} compliant`;case"census":return`Device census: ${e.patients} patients, ${e.uc} catheters, ${e.cl} lines, ${e.vent} ventilated`;
+  case"hai":return`${String(e.type).toUpperCase()} case${e.patientRef?" for "+e.patientRef:""}${e.organism?", "+e.organism:""}`;case"proc":return`${e.count} surgical procedures`;case"nsi":return`Needle-stick injury, ${e.staff}`;
+  case"isolate":return`${e.org} isolate from ${String(e.specimen||"").toLowerCase()}`;case"rxaudit":return e.outcome?`Prescription audit: ${e.drug}${e.patientRef?" for "+e.patientRef:""}, ${String(e.outcome).toLowerCase()}`:`Prescription audit: ${e.appropriate} of ${e.reviewed} met policy`;
+  case"abx":return`${e.drug}: ${e.ddd} DDD, ${e.dot} days of therapy`;case"env":return e.method?`${e.type} sample at ${e.location}: ${e.value} ${e.unit} (limit ${e.limit})`:`${e.type} sample at ${e.location}: ${e.result==="pass"?"within limits":"out of limits"}`;default:return f?.title||e.kind}}
+function csvPanel(){return `<div class="panel" style="margin-top:18px" id="formPanel"><div class="ph"><h2>Import lab results</h2><button class="btn small" id="closeForm">Close</button></div>
+<p class="muted" style="max-width:70ch">Use a CSV with the columns <b>date, ward, organism, specimen, patient</b>. Ward can be the ward’s name as shown here. Organism must be one of ${ORGS.join(", ")}. Up to 300 rows at a time.</p>
+<div class="ctrls" style="margin-top:12px"><input type="file" id="csvFile" accept=".csv,text/csv"><button class="btn primary" id="csvGo" disabled>Import rows</button></div><div id="csvPrev" class="small" style="margin-top:12px"></div></div>`}
+let csvRows=[];
+function bindCsv(){const fi=$("#csvFile");if(!fi)return;$("#closeForm").onclick=()=>{openForm=null;render(false)};
+  fi.onchange=async()=>{const txt=await fi.files[0].text();const lines=txt.split(/\r?\n/).filter(l=>l.trim());const head=lines.shift().toLowerCase().split(",").map(s=>s.trim());
+    const idx=k=>head.indexOf(k);const wmap={};wardIds().forEach(w=>{wmap[w]=w;wmap[wardName(w).toLowerCase()]=w});
+    const ok=[],bad=[];lines.slice(0,300).forEach((l,i)=>{const c=l.split(",").map(s=>s.trim());const date=c[idx("date")],ward=wmap[(c[idx("ward")]||"").toLowerCase()],org=(c[idx("organism")]||"").toUpperCase();
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(date||"")||!ward||!ORGS.includes(org))bad.push(i+2);else ok.push({kind:"isolate",date,ward,org,specimen:c[idx("specimen")]||"Other",patientRef:c[idx("patient")]||"",month:date.slice(0,7)})});
+    csvRows=ok;$("#csvPrev").innerHTML=`${ok.length} row${ok.length===1?"":"s"} ready to import.${bad.length?` <span style="color:var(--bad)">Rows skipped because the date, ward or organism wasn’t recognised: ${bad.slice(0,15).join(", ")}${bad.length>15?"…":""}.</span>`:""} Dates must be written as YYYY-MM-DD.`;$("#csvGo").disabled=!ok.length||!S.canWrite};
+  $("#csvGo").onclick=async()=>{const b=$("#csvGo");b.disabled=true;let n=0;try{for(let i=0;i<csvRows.length;i+=8){await Promise.all(csvRows.slice(i,i+8).map(r=>S.db.collection("entries").add({...r,createdAt:new Date().toISOString(),by:S.uid||null})));n=Math.min(i+8,csvRows.length);$("#csvPrev").textContent=`Imported ${n} of ${csvRows.length}…`}toast(`Imported ${csvRows.length} lab results`);csvRows=[]}catch(e){writeErr(e);$("#csvPrev").textContent=`Imported ${n} rows before an error stopped the import.`}}}
+/* ---------- surveillance ---------- */
+let survTab="hh",haiType="clabsi",trendWard="";
+function tabs(list,cur,id){return `<div class="tabs" role="tablist" id="${id}">${list.map(([k,n])=>`<button role="tab" data-tab="${k}" aria-selected="${k===cur}">${n}</button>`).join("")}</div>`}
+PAGES.surveillance={html(){
+  const m=S.month,a=agg(m),t=TH(),l6=months().filter(x=>x<=m).slice(-6);
+  let body="";
+  if(survTab==="hh"){
+    body=`<div class="panel"><div class="ph"><h2>Compliance by ward</h2><p>Compliant actions ÷ opportunities × 100. Target ${t.hhTarget}%.</p></div><div class="tablewrap"><table><thead><tr><th>Ward</th>${l6.map(x=>`<th class="num">${mShort(x)}</th>`).join("")}<th class="num">Opportunities, ${mShort(m)}</th></tr></thead><tbody>${wardIds().map(w=>`<tr><td>${esc(wardName(w))}</td>${l6.map(x=>{const y=agg(x).wards[w];const v=met(y).hh;return `<td class="num ${y.hhOpp?"cell-"+sev(v,t.hhTarget,false):"cell-bad"}">${y.hhOpp?r0(v)+"%":"Missed"}</td>`}).join("")}<td class="num">${r0(a.wards[w].hhOpp)}</td></tr>`).join("")}</tbody></table></div></div>
+    ${(()=>{const hs=S.entries.filter(e=>e.kind==="hh"&&e.month===m&&!e.voided&&e.shift);if(!hs.length)return `<div class="panel"><h2>By shift</h2><p class="muted" style="margin-top:8px">A breakdown by shift and observer appears here once audits are recorded with the hand hygiene form.</p></div>`;
+      const by=k=>{const g={};hs.forEach(e=>{const x=g[e[k]]||(g[e[k]]={n:0,o:0,c:0});x.n++;x.o+=+e.opp;x.c+=+e.compliant});return g};const sh=by("shift"),ob=by("observer");
+      const tbl=(g,lbl)=>`<table><thead><tr><th>${lbl}</th><th class="num">Audits</th><th class="num">Opportunities</th><th class="num">Compliance</th></tr></thead><tbody>${Object.entries(g).map(([k,v])=>`<tr><td>${esc(k)}</td><td class="num">${v.n}</td><td class="num">${v.o}</td><td class="num cell-${sev(v.c/v.o*100,t.hhTarget,false)}">${r0(v.c/v.o*100)}%</td></tr>`).join("")}</tbody></table>`;
+      return `<div class="grid2"><div class="panel"><div class="ph"><h2>By shift</h2><p>Recorded audits, ${mLabel(m)}</p></div><div class="tablewrap">${tbl(sh,"Shift")}</div></div><div class="panel"><div class="ph"><h2>By observer</h2><p>Large gaps between observers can mean audits need calibrating</p></div><div class="tablewrap">${tbl(ob,"Observer")}</div></div></div>`})()}
+    <div class="panel"><div class="ph"><h2>Twelve-month trend</h2><label class="small muted">Ward <select id="trendWard">${wardOptions(trendWard,true)}</select></label></div><div class="chartbox"><canvas id="cS"></canvas></div></div>`;
+  }else if(survTab==="hai"){
+    const H=[...HAI,{k:"ssi",n:"SSI",den:"procedures",unit:"% of procedures"}];const h=H.find(x=>x.k===haiType);const k100=h.k==="ssi"?100:1000;
+    const p3=prevMonths(m,3);
+    body=`<div class="panel"><div class="ph"><h2>${h.n} by ward, ${mLabel(m)}</h2><div class="ctrls">${H.map(x=>`<button class="btn small${x.k===haiType?" primary":""}" data-hai="${x.k}">${x.n}</button>`).join("")}</div></div><p class="small muted" style="margin-bottom:10px">${h.k==="ssi"?"Infections ÷ procedures × 100":`Infections ÷ ${h.den==="ucDays"?"catheter":h.den==="clDays"?"central-line":"ventilator"} days × 1,000`}. Target ${t[h.k]} ${h.unit}. Only confirmed cases are counted${(()=>{const n=S.entries.filter(e=>e.kind==="hai"&&e.type===h.k&&e.month===m&&!e.voided&&(e.status==="suspected"||e.status==="review")).length;return n?`; ${n} more ${n>1?"are":"is"} <a href="#review">awaiting review</a>`:""})()}.</p>
+    <div class="tablewrap"><table><thead><tr><th>Ward</th><th class="num">Cases</th><th class="num">${h.k==="ssi"?"Procedures":"Device-days"}</th><th class="num">Rate</th><th class="num">Previous 3 months</th><th>Status</th></tr></thead><tbody>${wardIds().map(w=>{const x=a.wards[w];const v=rate(x[h.k],x[h.den],k100);const pn=p3.reduce((s,p)=>s+agg(p).wards[w][h.k],0),pd=p3.reduce((s,p)=>s+agg(p).wards[w][h.den],0);const pv=rate(pn,pd,k100);const sv=sev(v,t[h.k]);
+      return x[h.den]?`<tr><td>${esc(wardName(w))}</td><td class="num">${x[h.k]}</td><td class="num">${r0(x[h.den])}</td><td class="num cell-${sv}">${r1(v)}</td><td class="num">${r1(pv)}</td><td><span class="pill ${sv}">${sv==="bad"?"Above target":sv==="warn"?"Near target":"Within target"}</span></td></tr>`:(x[h.k]>0?`<tr><td>${esc(wardName(w))}</td><td class="num">${x[h.k]}</td><td class="num cell-bad">Missing</td><td class="num cell-bad">Unavailable</td><td></td><td><span class="pill bad">Add ${h.k==="ssi"?"procedure counts":"device-days"}</span></td></tr>`:`<tr><td>${esc(wardName(w))}</td><td colspan="5" class="muted">Not applicable, no ${h.k==="ssi"?"procedures":"device-days"} recorded</td></tr>`)}).join("")}
+    <tr><td><b>Hospital</b></td><td class="num"><b>${a.total[h.k]}</b></td><td class="num"><b>${r0(a.total[h.den])}</b></td><td class="num"><b>${r1(rate(a.total[h.k],a.total[h.den],k100))}</b></td><td></td><td></td></tr></tbody></table></div></div>
+    <div class="panel"><div class="ph"><h2>${h.n} trend</h2><label class="small muted">Ward <select id="trendWard">${wardOptions(trendWard,true)}</select></label></div><div class="chartbox"><canvas id="cS"></canvas></div></div>`;
+  }else if(survTab==="device"){
+    body=`<div class="panel"><div class="ph"><h2>Device utilisation, ${mLabel(m)}</h2><p>Device-days ÷ patient-days. A high ratio means more patients exposed to infection risk.</p></div><div class="tablewrap"><table><thead><tr><th>Ward</th><th class="num">Patient-days</th><th class="num">Catheter-days</th><th class="num">Catheter ratio</th><th class="num">Line-days</th><th class="num">Line ratio</th><th class="num">Ventilator-days</th><th class="num">Ventilator ratio</th></tr></thead><tbody>${wardIds().map(w=>{const x=a.wards[w],k=met(x);const c=(v,l)=>`<td class="num ${v!=null?"cell-"+sev(v,l):""}">${v!=null?v.toFixed(2):"–"}</td>`;return `<tr><td>${esc(wardName(w))}</td><td class="num">${r0(x.patientDays)}</td><td class="num">${r0(x.ucDays)}</td>${c(k.ucDU,t.ucDU)}<td class="num">${r0(x.clDays)}</td>${c(k.clDU,t.clDU)}<td class="num">${r0(x.ventDays)}</td>${c(k.ventDU,t.ventDU)}</tr>`}).join("")}</tbody></table></div><p class="small muted" style="margin-top:10px">Limits: catheter ${t.ucDU}, central line ${t.clDU}, ventilator ${t.ventDU}. ICUs usually run higher than general wards, so read ICU ratios against their own history.</p></div>
+    <div class="panel"><div class="ph"><h2>Hospital device utilisation trend</h2></div><div class="chartbox"><canvas id="cS"></canvas></div></div>`;
+  }else{
+    const ml=months().filter(x=>x<=m).slice(-12);
+    body=`<div class="grid2"><div class="panel"><div class="ph"><h2>Environmental surveillance</h2><p>Share of samples within limits. Target ${t.envTarget}%.</p></div><div class="tablewrap"><table><thead><tr><th>Month</th><th class="num">Air</th><th class="num">Water</th><th class="num">Surface</th></tr></thead><tbody>${ml.slice(-6).reverse().map(x=>{const e=agg(x).env;const c=k=>{const v=e[k]?.tested?e[k].passed/e[k].tested*100:null;return `<td class="num ${v!=null?"cell-"+sev(v,t.envTarget,false):""}">${v!=null?`${r0(v)}% <span class="muted small">(${e[k].passed}/${e[k].tested})</span>`:"–"}</td>`};return `<tr><td>${mLabel(x)}</td>${c("air")}${c("water")}${c("surface")}</tr>`}).join("")}</tbody></table></div></div>
+    <div class="panel"><div class="ph"><h2>Needle-stick injuries</h2><p>Reported exposures per month</p></div><div class="chartbox"><canvas id="cS"></canvas></div></div></div>
+    ${(()=>{const es=S.entries.filter(e=>e.kind==="env"&&e.month===m&&!e.voided).sort((a,b)=>b.date.localeCompare(a.date));return `<div class="panel"><div class="ph"><h2>Samples recorded, ${mLabel(m)}</h2><p>${es.filter(e=>e.result==="fail").length} not acceptable</p></div>${es.length?`<div class="tablewrap"><table><thead><tr><th>Date</th><th>Location</th><th>Type</th><th>Method</th><th class="num">Reading</th><th class="num">Limit</th><th>Status</th><th></th></tr></thead><tbody>${es.map(e=>{const linked=S.actions.find(c=>c.envId===e.id);return `<tr><td>${fmtDate(e.date)}</td><td>${esc(e.location)}</td><td>${esc(e.type)}</td><td>${esc(e.method||"–")}</td><td class="num">${e.value!=null?esc(e.value+" "+(e.unit||"")):"–"}</td><td class="num">${e.limit!=null?"≤ "+esc(e.limit):"–"}</td><td><span class="pill ${e.result==="pass"?"good":"bad"}">${e.result==="pass"?"Acceptable":"Not acceptable"}</span></td><td>${e.result==="fail"?(linked?`<span class="small muted">Action: ${esc(linked.owner)}, ${linked.status==="done"?"closed":"due "+fmtDate(linked.due)}</span>`:S.canWrite?inlineOpenBtn("envact",e.id,"Add corrective action"):""):""}</td></tr>${inlineForm("envact",e.id,"",'')?`<tr><td colspan="8">${inlineForm("envact",e.id,`<label>What will be done<input name="title" required value="Investigate and re-sample ${esc(e.location)}"></label><label>Owner<input name="owner" required></label><label>Due<input name="due" type="date" required></label>`,"Add action")}</td></tr>`:""}`}).join("")}</tbody></table></div>`:`<p class="empty">No individual samples recorded this month. The summary above includes the demo monthly totals.</p>`}</div>`})()}`;
+  }
+  return topbar("Surveillance","Rates are recalculated from every audit, census and case you record.")+tabs([["hh","Hand hygiene"],["hai","Infection rates"],["device","Device utilisation"],["env","Environment and sharps"]],survTab,"survTabs")+body;
+},after(){
+  document.querySelectorAll("#survTabs [data-tab]").forEach(b=>b.onclick=()=>{survTab=b.dataset.tab;render(false)});
+  document.querySelectorAll("[data-hai]").forEach(b=>b.onclick=()=>{haiType=b.dataset.hai;render(false)});
+  const tw=$("#trendWard");if(tw)tw.onchange=()=>{trendWard=tw.value;render(false)};
+  const m=S.month,t=TH(),s=series(a=>a,m),labels=s.ms.map(mShort);
+  const pick=a=>trendWard?a.wards[trendWard]:a.total;
+  const V=cssv("--violet"),P=cssv("--pink"),M=cssv("--muted"),Wn=cssv("--warn");
+  const target=(v,l)=>({label:l||"Target",data:labels.map(()=>v),borderColor:M,borderDash:[5,4],pointRadius:0,borderWidth:1.5});
+  if(survTab==="hh")chart("cS",{type:"line",data:{labels,datasets:[{label:trendWard?wardName(trendWard):"Hospital",data:s.vals.map(a=>met(pick(a)).hh),borderColor:V,backgroundColor:V,tension:.25,spanGaps:false},target(t.hhTarget)]},options:{scales:{y:{suggestedMin:50,max:100,grid:{color:cssv("--line")}},x:{grid:{display:false}}}}});
+  if(survTab==="hai")chart("cS",{type:"line",data:{labels,datasets:[{label:(trendWard?wardName(trendWard):"Hospital")+" "+haiType.toUpperCase(),data:s.vals.map(a=>met(pick(a))[haiType]),borderColor:P,backgroundColor:P,tension:.25},target(t[haiType])]}});
+  if(survTab==="device")chart("cS",{type:"line",data:{labels,datasets:[["ucDU","Urinary catheter",V],["clDU","Central line",P],["ventDU","Ventilator",Wn]].map(([k,n,c])=>({label:n,data:s.vals.map(a=>met(a.total)[k]),borderColor:c,backgroundColor:c,tension:.25}))}});
+  if(survTab==="env")chart("cS",{type:"bar",data:{labels,datasets:[{label:"Injuries",data:s.vals.map(a=>a.total.nsi),backgroundColor:P,borderRadius:3}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{precision:0},grid:{color:cssv("--line")}},x:{grid:{display:false}}}}});
+}};
+/* ---------- stewardship ---------- */
+let amsTab="heat",heatSpan=1;
+PAGES.stewardship={html(){
+  const m=S.month,a=agg(m),t=TH();let body="";
+  if(amsTab==="heat"){
+    const span=months().filter(x=>x<=m).slice(-heatSpan);const cnt=(w,o)=>span.reduce((s,x)=>s+(agg(x).wards[w].mdro[o]||0),0);
+    let max=1;wardIds().forEach(w=>ORGS.forEach(o=>max=Math.max(max,cnt(w,o))));
+    body=`<div class="panel"><div class="ph"><h2>Resistance heat map</h2><div class="ctrls">${[[1,"This month"],[3,"Last 3 months"],[12,"Last 12 months"]].map(([n,l])=>`<button class="btn small${n===heatSpan?" primary":""}" data-span="${n}">${l}</button>`).join("")}</div></div><p class="small muted" style="margin-bottom:10px">Multidrug-resistant isolates by ward, ${span.length>1?`${mLabel(span[0])} to ${mLabel(m)}`:mLabel(m)}. Darker cells mean more isolates.</p>
+    <div class="tablewrap"><table class="heat"><thead><tr><th>Ward</th>${ORGS.map(o=>`<th class="num" title="${ORG_NAMES[o]}">${o}</th>`).join("")}<th class="num">Total</th></tr></thead><tbody>${wardIds().map(w=>`<tr><td>${esc(wardName(w))}</td>${ORGS.map(o=>{const v=cnt(w,o);const pct=Math.round(v/max*85);return `<td class="h" style="background:color-mix(in srgb,var(--pink) ${pct}%,var(--surface));${pct>50?"color:var(--surface)":""}">${v}</td>`}).join("")}<td class="num"><b>${ORGS.reduce((s,o)=>s+cnt(w,o),0)}</b></td></tr>`).join("")}</tbody></table></div>
+    <div class="legend">${ORGS.map(o=>`<span><b>${o}</b> ${ORG_NAMES[o]}</span>`).join("")}</div></div>`;
+  }else if(amsTab==="use"){
+    const pv=prevMonths(m,1)[0],pa=pv?agg(pv):null,pd=a.total.patientDays;
+    const drugs=Object.keys(a.abx).sort((x,y)=>(a.abx[y].ddd||0)-(a.abx[x].ddd||0));
+    body=`<div class="panel"><div class="ph"><h2>Consumption by antibiotic, ${mLabel(m)}</h2><p>Hospital total ${r1(ddd100(a))} DDD per 100 patient-days, ${r0(dot1000(a))} days of therapy per 1,000 patient-days</p></div>
+    <div class="tablewrap"><table><thead><tr><th>Antibiotic</th><th class="num">DDD</th><th class="num">DDD per 100 patient-days</th><th class="num">Days of therapy per 1,000 patient-days</th><th class="num">Change vs last month</th></tr></thead><tbody>${drugs.map(d=>{const v=rate(a.abx[d].ddd,pd,100),p=pa&&pa.abx[d]?rate(pa.abx[d].ddd,pa.total.patientDays,100):null;const ch=p?(v/p-1)*100:null;return `<tr><td>${esc(d)}${["Meropenem","Colistin"].includes(d)?` <span class="pill info">Reserve</span>`:""}</td><td class="num">${r0(a.abx[d].ddd)}</td><td class="num">${r1(v)}</td><td class="num">${r1(rate(a.abx[d].dot,pd,1000))}</td><td class="num ${ch>10?"cell-bad":ch>5?"cell-warn":""}">${ch==null?"–":(ch>0?"+":"")+r0(ch)+"%"}</td></tr>`}).join("")}</tbody></table></div></div>
+    <div class="panel"><div class="ph"><h2>Twelve-month consumption</h2><p>DDD per 100 patient-days</p></div><div class="chartbox" style="height:300px"><canvas id="cA"></canvas></div></div>`;
+  }else if(amsTab==="rx"){
+    const l6=months().filter(x=>x<=m).slice(-6);
+    body=`<div class="panel"><div class="ph"><h2>Prescription audit</h2><p>Share of audited antibiotic prescriptions that met hospital policy. Target ${t.rxTarget}%.</p></div><div class="tablewrap"><table><thead><tr><th>Ward</th>${l6.map(x=>`<th class="num">${mShort(x)}</th>`).join("")}<th class="num">Reviewed, ${mShort(m)}</th></tr></thead><tbody>${wardIds().map(w=>`<tr><td>${esc(wardName(w))}</td>${l6.map(x=>{const v=met(agg(x).wards[w]).rx;return `<td class="num ${v!=null?"cell-"+sev(v,t.rxTarget,false):""}">${v!=null?r0(v)+"%":"–"}</td>`}).join("")}<td class="num">${a.wards[w].rxReviewed}</td></tr>`).join("")}</tbody></table></div></div>
+    ${(()=>{const rs=S.entries.filter(e=>e.kind==="rxaudit"&&e.month===m&&!e.voided&&e.outcome);if(!rs.length)return `<div class="panel"><h2>Where prescriptions fall short</h2><p class="muted" style="margin-top:8px">Once prescriptions are audited one by one with the prescription audit form, this shows which policy checks fail most often.</p></div>`;
+      return `<div class="panel"><div class="ph"><h2>Where prescriptions fall short</h2><p>${rs.length} prescription${rs.length>1?"s":""} audited individually this month</p></div><div class="tablewrap"><table><thead><tr><th>Check</th><th class="num">Applicable</th><th class="num">Failed</th><th class="num">Failure rate</th></tr></thead><tbody>${RX_CRIT.map(c=>{const ap=rs.filter(e=>e[c.k]==="Yes"||e[c.k]==="No").length,no=rs.filter(e=>e[c.k]==="No").length;return {c,ap,no,r:ap?no/ap*100:null}}).sort((x,y)=>(y.r??-1)-(x.r??-1)).map(x=>`<tr><td>${x.c.n}</td><td class="num">${x.ap}</td><td class="num">${x.no}</td><td class="num ${x.r>20?"cell-bad":x.r>0?"cell-warn":""}">${x.r==null?"–":r0(x.r)+"%"}</td></tr>`).join("")}</tbody></table></div><p class="small muted" style="margin-top:8px">Outcomes: ${["Appropriate","Needs change","Inappropriate"].map(o=>`${o.toLowerCase()} ${rs.filter(e=>e.outcome===o).length}`).join(", ")}.</p></div>`})()}`;
+  }else if(amsTab==="ra"){
+    const order={pending:0,approved:1,rejected:2};const list=S.ra.slice().sort((x,y)=>order[x.status]-order[y.status]||(y.date||"").localeCompare(x.date||""));
+    body=`<div class="panel"><div class="ph"><h2>Restricted antibiotic approvals</h2><p>${list.filter(r=>r.status==="pending").length} awaiting a decision</p></div>${list.length?`<ul class="list">${list.map(r=>`<li><div class="main"><b>${esc(r.drug)} for ${esc(r.patientRef||"patient")}</b> <span class="pill ${r.status==="pending"?"warn":r.status==="approved"?"good":"mute"}">${r.status[0].toUpperCase()+r.status.slice(1)}</span><div class="small muted">${esc(wardName(r.ward))}, ${fmtDate(r.date)}, requested by ${esc(r.requestedBy||"–")}</div><div class="small" style="margin-top:4px">${esc(r.indication)}</div>${r.note?`<div class="small muted" style="margin-top:4px">Decision note: ${esc(r.note)}</div>`:""}</div>${r.status==="pending"&&S.canWrite?`<div class="ctrls">${inlineOpenBtn("ra",r.id+":approved","Approve",true)}${inlineOpenBtn("ra",r.id+":rejected","Reject")}</div>`:""}${inlineForm("ra",r.id+":approved",`<label class="wide">Approval note (optional)<input name="note" placeholder="e.g. approved for 7 days, review with culture"></label>`,"Approve request")}${inlineForm("ra",r.id+":rejected",`<label class="wide">Reason for rejecting<input name="note" required></label>`,"Reject request")}</li>`).join("")}</ul>`:`<p class="empty">No requests yet. Doctors can raise one from Record data.</p>`}</div>`;
+  }else{
+    const ab=S.content.antibiogram;
+    body=ab?`<div class="panel"><div class="ph"><h2>Cumulative antibiogram</h2><p>${esc(ab.period)}. Percent of isolates susceptible.</p></div><div class="tablewrap"><table class="heat"><thead><tr><th>Organism</th><th class="num">Isolates</th>${ab.antibiotics.map(x=>`<th class="num">${esc(x)}</th>`).join("")}</tr></thead><tbody>${ab.rows.map(r=>r.n<t.abgMin?`<tr><td><i>${esc(r.org)}</i></td><td class="num">${r.n}</td><td colspan="${ab.antibiotics.length}" class="muted" style="white-space:normal">Fewer than ${t.abgMin} isolates in this period, so percentages are not reported. Small numbers give misleading susceptibility rates.</td></tr>`:`<tr><td><i>${esc(r.org)}</i></td><td class="num">${r.n}</td>${r.s.map(v=>`<td class="h ${v==null?"muted":v>=80?"cell-good":v>=60?"cell-warn":"cell-bad"}">${v==null?"–":v+"%"}</td>`).join("")}</tr>`).join("")}</tbody></table></div><div class="legend"><span><i style="background:var(--good-soft)"></i>80% or more susceptible</span><span><i style="background:var(--warn-soft)"></i>60 to 79%</span><span><i style="background:var(--bad-soft)"></i>Below 60%</span><span>A dash means not tested or not relevant for that organism.</span><span>Organisms with fewer than ${t.abgMin} isolates are suppressed, following CLSI M39.</span></div></div>`:`<div class="panel empty">No antibiogram has been loaded yet.</div>`;
+  }
+  return topbar("Antimicrobial stewardship","Resistance, consumption and prescribing, from lab and pharmacy data.")+tabs([["heat","Resistance heat map"],["use","Consumption"],["rx","Prescription audit"],["ra","Approvals"],["abg","Antibiogram"]],amsTab,"amsTabs")+body;
+},after(){
+  document.querySelectorAll("#amsTabs [data-tab]").forEach(b=>b.onclick=()=>{amsTab=b.dataset.tab;render(false)});
+  document.querySelectorAll("[data-span]").forEach(b=>b.onclick=()=>{heatSpan=+b.dataset.span;render(false)});
+  if(amsTab==="use"){const s=series(a=>a,S.month);const drugs=[...new Set(s.vals.flatMap(a=>Object.keys(a.abx)))];const pal=[cssv("--violet"),cssv("--pink"),cssv("--warn"),cssv("--good"),cssv("--bad"),cssv("--muted"),"#3F7FB0","#8C6D2E"];
+    chart("cA",{type:"bar",data:{labels:s.ms.map(mShort),datasets:drugs.map((d,i)=>({label:d,data:s.vals.map(a=>rate(a.abx[d]?.ddd||0,a.total.patientDays,100)),backgroundColor:pal[i%pal.length]}))},options:{scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:cssv("--line")}}}}})}
+}};
+/* ---------- early warning ---------- */
+let ewPick=0;
+PAGES.warning={html(){
+  const m=S.month,ew=earlyWarnings(m),t=TH();
+  const proj=wardIds().map(w=>{const s=series(a=>met(a.wards[w]).clabsi,m).vals.slice(-4);const tr=slope(s);return{w,cur:s[s.length-1],next:tr?Math.max(0,tr.next):null}}).filter(p=>p.next!=null).sort((x,y)=>y.next-x.next);
+  if(ewPick>=ew.length)ewPick=0;
+  return topbar("Early warning","Signals that a ward is drifting before it crosses a threshold.")+
+  `<div class="grid2"><div class="panel"><div class="ph"><h2>Signals this month</h2><p>${ew.length} found</p></div>${ew.length?`<ul class="list">${ew.map((e,i)=>`<li><div class="main"><b>${esc(wardName(e.w))}: ${e.s.n}</b> <span class="pill ${e.flag}">${e.flag==="bad"?"Unusual":"Trending"}</span><div class="small muted">${esc(e.why)}</div></div><button class="btn small${i===ewPick?" primary":""}" data-ew="${i}">Show</button></li>`).join("")}</ul>`:`<p class="empty">No ward is outside its usual range this month.</p>`}</div>
+  <div class="panel"><div class="ph"><h2>${ew[ewPick]?esc(wardName(ew[ewPick].w))+": "+ew[ewPick].s.n:"Signal detail"}</h2><p>Shaded band: usual range</p></div><div class="chartbox"><canvas id="cE"></canvas></div></div></div>
+  <div class="grid2" style="margin-top:18px"><div class="panel"><div class="ph"><h2>CLABSI projection for next month</h2><p>Straight-line trend over the last four months</p></div><div class="tablewrap"><table><thead><tr><th>Ward</th><th class="num">This month</th><th class="num">Projected</th><th>Against benchmark ${t.clabsi}</th></tr></thead><tbody>${proj.map(p=>`<tr><td>${esc(wardName(p.w))}</td><td class="num">${r1(p.cur)}</td><td class="num cell-${sev(p.next,t.clabsi)}">${r1(p.next)}</td><td><span class="pill ${sev(p.next,t.clabsi)}">${p.next>t.clabsi?"Likely to exceed":p.next>t.clabsi*.8?"Close":"Within"}</span></td></tr>`).join("")}</tbody></table></div></div>
+  <div class="panel"><h2>How the signals are found</h2><p style="margin-top:10px">Each ward is compared with its own previous six months. A rate is flagged as unusual when it sits more than two standard deviations above its usual level. Isolate counts use the same idea, scaled for small numbers. A rate is flagged as trending when the line through the last four months points past the target next month.</p><p class="muted" style="margin-top:10px">These are statistical rules rather than a trained model. Once the hospital has a year or more of daily records, they can be replaced with a model that also uses length of stay, device duration and antibiotic exposure for each patient.</p></div></div>`;
+},after(){
+  document.querySelectorAll("[data-ew]").forEach(b=>b.onclick=()=>{ewPick=+b.dataset.ew;render(false)});
+  const e=earlyWarnings(S.month)[ewPick];if(!e)return;const s=series(a=>sigVal(a.wards[e.w],e.s),S.month);
+  const hiK=e.s.count?2*Math.sqrt(Math.max(e.st.mean,.5)):2*Math.max(e.st.sd,e.s.hb?Math.max(e.st.mean*.25,.3):2);
+  const lo=e.s.hb?0:e.st.mean-hiK,hi=e.s.hb?e.st.mean+hiK:100;
+  chart("cE",{type:"line",data:{labels:s.ms.map(mShort),datasets:[{label:"Usual range",data:s.ms.map(()=>hi),borderColor:"transparent",backgroundColor:cssv("--violet-soft"),fill:"+1",pointRadius:0,order:2},{label:"_lo",data:s.ms.map(()=>Math.max(0,lo)),borderColor:"transparent",pointRadius:0,order:3},{label:e.s.n,data:s.vals,borderColor:cssv("--pink"),backgroundColor:cssv("--pink"),tension:.25,order:0}]},options:{plugins:{legend:{labels:{filter:i=>!i.text.startsWith("_")}}}}});
+}};
+
+/* ---------- alerts ---------- */
+let alertFilter="all",alertView="open";
+const ST_LBL={new:"New",acknowledged:"Acknowledged",assigned:"Assigned",closed:"Closed"};
+function alertStatus(a){return S.alertState[a.key]||{status:"new"}}
+async function setAlert(a,patch,action,note){const cur=S.alertState[a.key]||{};const body={...cur,...patch,title:a.title,cat:a.cat,sev:a.sev,month:S.month,history:[...(cur.history||[]),{at:nowISO(),by:S.uid||null,action,note:note||""}]};delete body.id;await S.db.collection("alertState").doc(a.key).set(body)}
+const findAlert=key=>alerts(S.month).find(a=>a.key===key);
+INLINE.assign=async(key,d)=>{const a=findAlert(key);if(!a)return"This alert is no longer active.";let actId=null;
+  if(d.makeAction){const ref=await S.db.collection("actions").add({title:"Investigate: "+a.title,ward:"",owner:d.assignee,due:d.due,source:"Alert: "+a.title,status:"open",created:today(),alertKey:key,by:S.uid||null});actId=ref.id}
+  await setAlert(a,{status:"assigned",assignee:d.assignee,due:d.due,actionId:actId},"Assigned to "+d.assignee,d.note);toast(d.makeAction?"Assigned, and a corrective action was created":"Alert assigned")};
+/* Inference, interventions and outcome: what the data suggests, what was done, and whether it worked. */
+const IV_TYPES=["Staff education or training","Bundle or checklist audit","Contact precautions or isolation","Environmental cleaning or disinfection","Equipment or supplies","Antibiotic review or de-escalation","Screening cultures","Policy or process change","Other"];
+function inferenceFor(a){
+  const lead=a.detail+" ";
+  switch(a.cat){
+    case"Infection rate":return lead+"The rate is above the hospital target. Possible contributors to check: device days, insertion and maintenance bundle compliance, hand hygiene in the same ward, and whether the cases cluster in time or by staff. Review each case before concluding.";
+    case"Device use":return lead+"Devices left in longer than needed raise infection risk. Check whether each device still has a documented reason and whether daily necessity review is happening.";
+    case"MDRO":return lead+"A rise in resistant organisms can mean spread between patients. Check for common beds, staff or equipment, confirm contact precautions are in place, and review antibiotic use in the ward.";
+    case"Hand hygiene":case"Missed surveillance":return lead+"Low or missing audit data weakens every other measure in this ward. Check observer availability and sample shifts, then plan targeted feedback and refresher training.";
+    case"Stewardship":return lead+"Prescriptions that do not meet policy add to resistance pressure. Check which drugs and indications drive this, and whether prescribers know the policy.";
+    case"Environment":return lead+"Samples outside limits point to a cleaning, ventilation or water-treatment problem. Identify the location, repeat the sample after correction, and look for related infections nearby.";
+    default:return lead;
+  }
+}
+const alertId=a=>a.cat+"|"+a.title;
+function ivOutcome(a,iv){
+  const ms=months().filter(x=>x>iv.month);
+  if(!ms.length)return{lbl:"Waiting for next month's data",cls:"mute"};
+  const n=ms[0];
+  return alerts(n).some(x=>alertId(x)===alertId(a))?{lbl:`Still flagged in ${mLabel(n)}`,cls:"warn"}:{lbl:`Not flagged in ${mLabel(n)}. Improved`,cls:"good"};
+}
+function priorIv(a){
+  return Object.values(S.alertState).filter(s=>s.cat===a.cat&&s.title===a.title&&s.month&&s.month<S.month).flatMap(s=>(s.interventions||[]).map(i=>({...i,month:i.month||s.month})));
+}
+function ivHtml(a,st){
+  const inf=st.inference||inferenceFor(a),own=(st.interventions||[]),prior=priorIv(a);
+  return `<div class="small" style="margin-top:6px"><b>Inference</b> <span class="pill ${st.inference?"good":"mute"}">${st.inference?"Confirmed by "+esc(nameOf(st.inferenceBy)):"Suggested, not yet confirmed"}</span><div class="muted" style="margin-top:2px;max-width:80ch">${esc(inf)}</div></div>`+
+  (own.length?`<div class="small" style="margin-top:6px"><b>Action taken</b><ul style="margin:2px 0;padding-left:18px">${own.map(i=>{const o=ivOutcome(a,i);return `<li>${fmtDate(i.date)}: ${esc(i.type)}. ${esc(i.what)} <span class="muted">(${esc(i.by)})</span> <span class="pill ${o.cls}">${o.lbl}</span></li>`}).join("")}</ul></div>`:"")+
+  (prior.length?`<div class="small muted" style="margin-top:6px">Earlier months, same alert: ${prior.map(i=>`${esc(mShort(i.month))} ${esc(i.type.toLowerCase())}`).join("; ")}. ${ivOutcomeNote(prior)}</div>`:"");
+}
+function ivOutcomeNote(prior){return prior.length>=2?"This problem has come back after earlier action, so consider a different approach.":"This problem has come back after earlier action."}
+INLINE.infer=async(key,d)=>{const a=findAlert(key);if(!a)return"This alert is no longer active.";await setAlert(a,{inference:d.text,inferenceBy:S.uid||null},"Inference confirmed");toast("Inference saved")};
+INLINE.interv=async(key,d)=>{const a=findAlert(key);if(!a)return"This alert is no longer active.";const cur=S.alertState[key]||{};
+  const iv={type:d.type,what:d.what,by:d.by,date:d.date,month:S.month,baseline:a.detail,recordedBy:S.uid||null};
+  await setAlert(a,{interventions:[...(cur.interventions||[]),iv],status:(cur.status||"new")==="new"?"acknowledged":cur.status},"Intervention recorded: "+d.type,d.what);toast("Action recorded. The outcome shows once next month's data is in.")};
+INLINE.close=async(key,d)=>{const a=findAlert(key);if(!a)return"This alert is no longer active.";await setAlert(a,{status:"closed",closeNote:d.note},"Closed",d.note);toast("Alert closed")};
+PAGES.alerts={html(){
+  const al=alerts(S.month);
+  const f=al.filter(a=>(alertFilter==="all"||a.sev===alertFilter)&&(alertView==="all"||(alertView==="closed"?alertStatus(a).status==="closed":alertStatus(a).status!=="closed")));
+  const cats=[...new Set(f.map(a=>a.cat))];const open=al.filter(a=>alertStatus(a).status!=="closed");
+  return topbar("Alerts",`${open.filter(a=>alertStatus(a).status==="new").length} new, ${open.filter(a=>alertStatus(a).status!=="new").length} being handled, ${al.length-open.length} closed this month`)+
+  `<div class="ctrls" style="margin-bottom:16px;gap:16px"><div class="ctrls">${[["open","Open"],["closed","Closed"],["all","All"]].map(([k,l])=>`<button class="btn small${k===alertView?" primary":""}" data-av="${k}">${l}</button>`).join("")}</div><div class="ctrls">${[["all","Any severity"],["bad","Urgent"],["warn","To watch"],["info","Information"]].map(([k,l])=>`<button class="btn small${k===alertFilter?" primary":""}" data-af="${k}">${l}</button>`).join("")}</div></div>`+
+  (cats.length?cats.map(c=>`<div class="panel"><h2 style="margin-bottom:4px">${c}</h2>${f.filter(a=>a.cat===c).map(a=>{const st=alertStatus(a);const s=st.status;
+    return `<div class="alert ${a.sev}"><div class="bar"></div><div><b>${esc(a.title)}</b> <span class="pill ${s==="new"?(a.sev==="bad"?"bad":"warn"):s==="closed"?"good":"info"}">${ST_LBL[s]}${s==="assigned"&&st.assignee?": "+esc(st.assignee):""}</span><span class="small muted" style="display:block">${esc(a.detail)}${st.due&&s==="assigned"?` Due ${fmtDate(st.due)}.`:""}${s==="closed"&&st.closeNote?` Closed: “${esc(st.closeNote)}”`:""}</span>${ivHtml(a,st)}${historyHtml(st.history)}
+    ${S.canWrite?`<div class="ctrls" style="margin-top:8px">${s==="new"?`<button class="btn small" data-ack="${a.key}">Acknowledge</button>`:""}${s!=="closed"?inlineOpenBtn("assign",a.key,s==="assigned"?"Reassign":"Assign")+inlineOpenBtn("interv",a.key,"Record action taken")+inlineOpenBtn("infer",a.key,st.inference?"Edit inference":"Confirm inference")+inlineOpenBtn("close",a.key,"Close"):`<button class="btn small" data-reopen="${a.key}">Reopen</button>`}</div>`:""}
+    ${inlineForm("assign",a.key,`<label>Assign to<input name="assignee" required placeholder="Name or role"></label><label>Respond by<input name="due" type="date" required value="${today()}"></label><label class="wide" style="flex-direction:row;align-items:center;gap:8px;font-weight:400"><input type="checkbox" name="makeAction" style="min-height:auto" checked> Also create a corrective action for this person</label><label class="wide">Note<input name="note"></label>`,"Assign")}
+    ${inlineForm("interv",a.key,`<label>Type of action<select name="type">${IV_TYPES.map(t=>`<option>${t}</option>`).join("")}</select></label><label>Done by<input name="by" required placeholder="Name or role"></label><label>Date<input name="date" type="date" required value="${today()}"></label><label class="wide">What was done<input name="what" required placeholder="e.g. Refresher on central line bundle for 24 nurses"></label>`,"Save action")}
+    ${inlineForm("infer",a.key,`<label class="wide">Inference (edit the suggestion so it reflects your review)<textarea name="text" required rows="4" style="width:100%">${esc(st.inference||inferenceFor(a))}</textarea></label>`,"Confirm inference")}
+    ${inlineForm("close",a.key,`<label class="wide">What was done, or why no action is needed<input name="note" required></label>`,"Close alert")}</div><a class="btn small" style="text-decoration:none" href="#${a.link}">Open</a></div>`}).join("")}</div>`).join(""):`<div class="panel empty">${alertView==="closed"?"No closed alerts this month.":"No open alerts in this view."}</div>`)+
+  `<p class="small muted" style="margin-top:14px;max-width:72ch">Alerts are recalculated from the data each time. Closing an alert records the decision for this month; if the problem is still there next month, a new alert opens.</p>`;
+},after(){
+  document.querySelectorAll("[data-af]").forEach(b=>b.onclick=()=>{alertFilter=b.dataset.af;render(false)});
+  document.querySelectorAll("[data-av]").forEach(b=>b.onclick=()=>{alertView=b.dataset.av;render(false)});
+  document.querySelectorAll("[data-ack]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{await setAlert(findAlert(b.dataset.ack),{status:"acknowledged"},"Acknowledged");toast("Alert acknowledged")}catch(e){writeErr(e);b.disabled=false}});
+  document.querySelectorAll("[data-reopen]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{await setAlert(findAlert(b.dataset.reopen),{status:"acknowledged",closeNote:""},"Reopened");toast("Alert reopened")}catch(e){writeErr(e);b.disabled=false}});
+}};
+
+INLINE.ra=async(iid,d)=>{const[id,st]=iid.split(":");await S.db.collection("ra").doc(id).update({status:st,note:d.note||"",decidedAt:nowISO(),decidedBy:S.uid||null});toast(st==="approved"?"Request approved":"Request rejected")};
+INLINE.envact=async(id,d)=>{const e=S.entries.find(x=>x.id===id);await S.db.collection("actions").add({title:d.title,owner:d.owner,due:d.due,ward:"",source:`Environmental sample at ${e?.location||"unknown location"} not acceptable`,status:"open",created:today(),envId:id,by:S.uid||null});toast("Corrective action added")};
+/* ---------- review and data quality ---------- */
+const DUP_KEYS={hh:["opp","compliant","shift"],census:["patients","uc","cl","vent"],hai:["type","patientRef"],proc:["count"],nsi:["staff","device"],isolate:["org","patientRef","specimen"],rxaudit:["patientRef","drug"],abx:["drug","ddd"],env:["type","location","method"]};
+function duplicates(){const g={};S.entries.filter(e=>!e.voided&&DUP_KEYS[e.kind]).forEach(e=>{const k=[e.kind,e.ward||"",e.date,...DUP_KEYS[e.kind].map(f=>String(e[f]??"").toLowerCase())].join("|");(g[k]||(g[k]=[])).push(e)});return Object.values(g).filter(x=>x.length>1)}
+function daysElapsed(m){const t=today();const[y,mo]=m.split("-").map(Number);const dim=new Date(y,mo,0).getDate();if(t.slice(0,7)===m)return +t.slice(8);return t.slice(0,7)<m?0:dim}
+function completeness(m){
+  const a=agg(m),base=!!S.monthly[m],ents=S.entries.filter(e=>e.month===m&&!e.voided),rows=[],exp=daysElapsed(m);let gaps=0;
+  for(const w of wardIds()){const x=a.wards[w];const hhN=ents.filter(e=>e.kind==="hh"&&e.ward===w).length;
+    const hh=x.hhOpp>0?{ok:true,t:hhN?`${hhN} audit${hhN>1?"s":""} recorded${base?" plus monthly totals":""}`:"Monthly totals on file"}:{ok:false,t:"No audit"};
+    const cd=new Set(ents.filter(e=>e.kind==="census"&&e.ward===w).map(e=>e.date)).size;
+    const cen=base?{ok:true,t:"Monthly totals on file"}:{ok:cd>=exp,t:`${cd} of ${exp} days`};
+    const den=[];HAI.forEach(h=>{if(x[h.k]>0&&!x[h.den])den.push(`${h.n} cases but no ${h.den==="ucDays"?"catheter":h.den==="clDays"?"line":"ventilator"}-days`)});if(x.ssi>0&&!x.procedures)den.push("SSI cases but no procedures");if(!x.patientDays)den.push("No patient-days");
+    if(!hh.ok)gaps++;if(!cen.ok)gaps++;gaps+=den.length;rows.push({w,hh,cen,den});}
+  const env=["air","water","surface"].map(k=>({k,n:a.env[k]?.tested||0}));env.forEach(e=>{if(!e.n)gaps++});
+  return{rows,env,gaps};
+}
+function reviewQueue(m){const cases=S.entries.filter(e=>e.kind==="hai"&&!e.voided&&(e.status==="suspected"||e.status==="review"));const unver=S.entries.filter(e=>!e.voided&&e.kind!=="hai"&&!e.verifiedAt);const dup=duplicates();const c=completeness(m);return{cases,unver,dup,comp:c,total:cases.length+unver.length+dup.length+c.gaps}}
+INLINE.case=async(iid,d)=>{const[id,status]=iid.split(":");if(status==="excluded"&&!d.note)return"Give a reason for excluding the case.";await entryUpdate(id,{status,reviewedBy:S.uid||null,reviewedAt:nowISO()},"Marked "+STATUS_LBL[status].toLowerCase(),d.note);toast(status==="confirmed"?"Case confirmed. It now counts in the rate.":status==="excluded"?"Case excluded":"Case marked under review")};
+PAGES.review={html(){
+  const m=S.month,q=reviewQueue(m),c=q.comp;
+  const caseBtns=e=>S.canWrite?`<div class="ctrls">${inlineOpenBtn("case",e.id+":confirmed","Confirm",true)}${e.status!=="review"?inlineOpenBtn("case",e.id+":review","Under review"):""}${inlineOpenBtn("case",e.id+":excluded","Exclude")}</div>`:"";
+  return topbar("Review and data quality","Cases to classify, records to verify, and gaps that would make a rate wrong.")+
+  `<div class="panel"><div class="ph"><h2>Infection cases awaiting review</h2><p>Not counted in any rate until confirmed</p></div>${q.cases.length?`<ul class="list">${q.cases.map(e=>`<li><div class="main"><b>${esc(entryTitle(e))}</b> ${entryPills(e)}<div class="small muted">${esc(wardName(e.ward))}, ${fmtDate(e.date)}, recorded by ${esc(nameOf(e.by))}${e.labRef?`. Lab ref ${esc(e.labRef)}`:""}</div>${e.notes?`<div class="small" style="margin-top:4px">${esc(e.notes)}</div>`:""}${historyHtml(e.history)}</div>${caseBtns(e)}${["confirmed","review","excluded"].map(st=>inlineForm("case",e.id+":"+st,`<label class="wide">${st==="excluded"?"Reason for excluding":"Review note (optional)"}<input name="note" ${st==="excluded"?"required":""} placeholder="${st==="confirmed"?"e.g. meets NHSN criteria, culture positive":""}"></label>`,st==="confirmed"?"Confirm case":st==="excluded"?"Exclude case":"Mark under review")).join("")}</li>`).join("")}</ul>`:`<p class="empty">No cases waiting. New cases saved as suspected or under review will appear here.</p>`}</div>
+  <div class="panel"><div class="ph"><h2>Records awaiting verification</h2><p>A second person checks each record against the source</p></div>${q.unver.length?`<ul class="list">${q.unver.slice(0,40).map(e=>{const mine=S.uid&&e.by===S.uid;return `<li><div class="main"><b>${esc(entryTitle(e))}</b> ${entryPills(e)}<div class="small muted">${esc(e.ward?wardName(e.ward):"Hospital-wide")}, ${fmtDate(e.date)}, recorded by ${esc(nameOf(e.by))}</div></div>${S.canWrite?(mine?`<span class="small muted">Needs someone other than you</span>`:`<button class="btn small primary" data-verify="${e.id}">Verify</button>`):""}</li>`}).join("")}</ul>${q.unver.length>40?`<p class="small muted">Showing 40 of ${q.unver.length}.</p>`:""}`:`<p class="empty">Every record has been verified.</p>`}</div>
+  <div class="panel"><div class="ph"><h2>Completeness, ${mLabel(m)}</h2><p>${c.gaps?`${c.gaps} gap${c.gaps>1?"s":""} found`:"No gaps"}</p></div><div class="tablewrap"><table><thead><tr><th>Ward</th><th>Hand hygiene audit</th><th>Daily census</th><th>Denominators</th></tr></thead><tbody>${c.rows.map(r=>`<tr><td>${esc(wardName(r.w))}</td><td class="${r.hh.ok?"":"cell-bad"}">${r.hh.t}</td><td class="${r.cen.ok?"":"cell-warn"}">${r.cen.t}</td><td class="${r.den.length?"cell-bad":"cell-good"}" style="white-space:normal">${r.den.length?r.den.join("; ")+". Rate shown as unavailable.":"Complete"}</td></tr>`).join("")}</tbody></table></div>
+  <p class="small" style="margin-top:12px">Environmental samples this month: ${c.env.map(e=>`${e.k} <b class="${e.n?"":"up-bad"}">${e.n||"none"}</b>`).join(", ")}.</p>
+  <p class="small muted" style="margin-top:6px">A missing denominator makes the rate unavailable rather than zero, so a ward with no device-days never looks infection-free.</p></div>
+  <div class="panel"><div class="ph"><h2>Possible duplicates</h2><p>Same ward, date and details. Nothing is removed automatically.</p></div>${q.dup.length?q.dup.map(g=>`<ul class="list" style="border:1px solid var(--line);border-radius:10px;padding:0 12px;margin-bottom:10px">${g.map(e=>`<li><div class="main"><b>${esc(entryTitle(e))}</b><div class="small muted">${esc(e.ward?wardName(e.ward):"Hospital-wide")}, ${fmtDate(e.date)}, recorded by ${esc(nameOf(e.by))} ${e.createdAt?"at "+e.createdAt.slice(11,16):""}</div></div>${S.canWrite?inlineOpenBtn("void",e.id,"Void this one"):""}${inlineForm("void",e.id,`<label class="wide">Reason<input name="reason" required value="Duplicate entry"></label>`,"Void record")}</li>`).join("")}</ul>`).join(""):`<p class="empty">No likely duplicates.</p>`}</div>`;
+},after(){
+  document.querySelectorAll("[data-verify]").forEach(b=>b.onclick=async()=>{b.disabled=true;try{await entryUpdate(b.dataset.verify,{verifiedBy:S.uid||null,verifiedAt:nowISO()},"Verified");toast("Record verified")}catch(e){writeErr(e);b.disabled=false}});
+}};
+
+
+/* ---------- reports ---------- */
+let repType="ipc";const repNarr={};
+const REPORTS=[["ipc","Monthly IPC report"],["ams","Monthly AMS report"],["dash","Monthly dashboard"],["quarter","Quarterly trend analysis"],["annual","Annual summary"]];
+function quarterOf(m){const[y,mo]=m.split("-").map(Number);const q=Math.floor((mo-1)/3);return{label:`Q${q+1} ${y}`,ms:[0,1,2].map(i=>`${y}-${String(q*3+i+1).padStart(2,"0")}`)}}
+function metricRows(ms){const t=TH();const rows=[["Hand hygiene compliance (%)",a=>met(a.total).hh,r0,`target ${t.hhTarget}`],["CAUTI per 1,000 catheter-days",a=>met(a.total).cauti,r1,`target ${t.cauti}`],["CLABSI per 1,000 line-days",a=>met(a.total).clabsi,r1,`target ${t.clabsi}`],["VAP per 1,000 ventilator-days",a=>met(a.total).vap,r1,`target ${t.vap}`],["SSI (% of procedures)",a=>met(a.total).ssi,r1,`target ${t.ssi}`],["Antibiotic DDD per 100 patient-days",a=>ddd100(a),r1,""],["Prescriptions meeting policy (%)",a=>met(a.total).rx,r0,`target ${t.rxTarget}`],["MDRO isolates",a=>met(a.total).mdroTotal,r0,""],["CRE isolates",a=>a.total.mdro.CRE||0,r0,""],["Needle-stick injuries",a=>a.total.nsi,r0,""]];
+  return `<div class="tablewrap"><table><thead><tr><th>Measure</th>${ms.map(x=>`<th class="num">${mShort(x)}</th>`).join("")}<th>Reference</th></tr></thead><tbody>${rows.map(([n,f,fmt,ref])=>`<tr><td>${n}</td>${ms.map(x=>`<td class="num">${S.monthly[x]||S.entries.some(e=>e.month===x)?fmt(f(agg(x))):"–"}</td>`).join("")}<td class="muted small">${ref}</td></tr>`).join("")}</tbody></table></div>`}
+function wardHaiTable(m){const a=agg(m),t=TH();return `<div class="tablewrap"><table><thead><tr><th>Ward</th><th class="num">Hand hygiene</th><th class="num">CAUTI</th><th class="num">CLABSI</th><th class="num">VAP</th><th class="num">SSI %</th><th class="num">MDRO</th></tr></thead><tbody>${wardIds().map(w=>{const x=a.wards[w],k=met(x);return `<tr><td>${esc(wardName(w))}</td><td class="num">${x.hhOpp?r0(k.hh)+"%":"Not audited"}</td>${["cauti","clabsi","vap"].map(h=>`<td class="num ${k[h]!=null&&k[h]>t[h]?"cell-bad":""}">${r1(k[h])}</td>`).join("")}<td class="num">${r1(k.ssi)}</td><td class="num">${k.mdroTotal}</td></tr>`}).join("")}</tbody></table></div>`}
+function reportHtml(type,m){
+  const a=agg(m),k=met(a.total),al=alerts(m),hosp=S.hospital||"Demo Hospital";
+  const narr=repNarr[type+m]?`<h2>Summary</h2><p>${esc(repNarr[type+m]).replace(/\n\n/g,"</p><p>")}</p>`:"";
+  const head=(title,period)=>`<h1>${title}</h1><p class="muted">${esc(hosp)}. ${period}. Generated ${fmtDate(today())}.</p>`;
+  const openAct=S.actions.filter(c=>c.status!=="done");
+  const actTable=openAct.length?`<div class="tablewrap"><table><thead><tr><th>Action</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody>${openAct.map(c=>`<tr><td style="white-space:normal">${esc(c.title)}</td><td>${esc(c.owner)}</td><td>${fmtDate(c.due)}</td><td>${isOverdue(c.due)?"Overdue":"Open"}</td></tr>`).join("")}</tbody></table></div>`:"<p>No open corrective actions.</p>";
+  if(type==="ipc")return head("Infection prevention and control report",mLabel(m))+narr+`<h2>Key measures</h2>${metricRows(months().filter(x=>x<=m).slice(-3))}<h2>By ward</h2>${wardHaiTable(m)}<h2>Environmental surveillance</h2><p>${["air","water","surface"].map(e=>`${e[0].toUpperCase()+e.slice(1)}: ${a.env[e]?.passed??0} of ${a.env[e]?.tested??0} samples within limits`).join(". ")}.</p><h2>Needle-stick injuries</h2><p>${a.total.nsi} reported this month.</p><h2>Alerts raised</h2>${al.filter(x=>x.sev!=="info").length?`<ul>${al.filter(x=>x.sev!=="info").map(x=>`<li>${esc(x.title)}. ${esc(x.detail)}</li>`).join("")}</ul>`:"<p>None.</p>"}<h2>Corrective actions</h2>${actTable}`;
+  if(type==="ams"){const pd=a.total.patientDays;const ra=S.ra.filter(r=>(r.date||"").startsWith(m));return head("Antimicrobial stewardship report",mLabel(m))+narr+`<h2>Consumption</h2><p>Total ${r1(ddd100(a))} DDD per 100 patient-days and ${r0(dot1000(a))} days of therapy per 1,000 patient-days.</p><div class="tablewrap"><table><thead><tr><th>Antibiotic</th><th class="num">DDD per 100 patient-days</th><th class="num">DOT per 1,000 patient-days</th></tr></thead><tbody>${Object.keys(a.abx).map(d=>`<tr><td>${esc(d)}</td><td class="num">${r1(rate(a.abx[d].ddd,pd,100))}</td><td class="num">${r1(rate(a.abx[d].dot,pd,1000))}</td></tr>`).join("")}</tbody></table></div><h2>Prescription audit</h2><p>${a.total.rxAppropriate} of ${a.total.rxReviewed} audited prescriptions (${r0(k.rx)}%) met hospital policy.</p><h2>Restricted antibiotics</h2><p>${ra.length} requests this month: ${ra.filter(r=>r.status==="approved").length} approved, ${ra.filter(r=>r.status==="rejected").length} rejected, ${ra.filter(r=>r.status==="pending").length} pending.</p><h2>Resistant organisms</h2><div class="tablewrap"><table><thead><tr><th>Ward</th>${ORGS.map(o=>`<th class="num">${o}</th>`).join("")}</tr></thead><tbody>${wardIds().map(w=>`<tr><td>${esc(wardName(w))}</td>${ORGS.map(o=>`<td class="num">${a.wards[w].mdro[o]||0}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`}
+  if(type==="dash"){return head("Monthly dashboard",mLabel(m))+narr+`<h2>At a glance</h2><p>Hand hygiene ${r0(k.hh)}%. Device-associated infections ${r1(k.dai)} per 1,000 device-days. Antibiotic use ${r1(ddd100(a))} DDD per 100 patient-days. ${k.mdroTotal} resistant isolates, including ${a.total.mdro.CRE||0} CRE.</p><h2>Highest-risk wards</h2><ul>${wardRisk(m).filter(r=>r.score>0).slice(0,3).map(r=>`<li>${esc(wardName(r.w))}: ${esc(r.why.join("; "))}</li>`).join("")||"<li>None above thresholds.</li>"}</ul><h2>For the committee</h2><ul>${agenda(m).map(i=>`<li>${esc(i)}</li>`).join("")}</ul>`}
+  if(type==="quarter"){const q=quarterOf(m);const[y,mo]=q.ms[0].split("-").map(Number);const pq=quarterOf(`${mo<=3?y-1:y}-${String(mo<=3?mo+9:mo-3).padStart(2,"0")}`);return head("Quarterly trend analysis",`${q.label}, compared with ${pq.label}`)+narr+`<h2>Measures by month</h2>${metricRows([...pq.ms,...q.ms])}<h2>Ward position at end of quarter</h2>${wardHaiTable(m)}`}
+  const ms=months().filter(x=>x<=m).slice(-12);return head("Annual summary",`${mLabel(ms[0])} to ${mLabel(m)}`)+narr+`<h2>Twelve months of key measures</h2>${metricRows(ms)}<h2>Corrective actions</h2><p>${S.actions.filter(c=>c.status==="done").length} closed, ${openAct.length} still open.</p>${actTable}`;
+}
+PAGES.reports={html(){
+  return topbar("Reports","Generated from the data on record. Download them for the committee or for accreditation files.")+tabs(REPORTS,repType,"repTabs")+
+  `<div class="ctrls" style="margin-bottom:14px">${S.sample?`<button class="btn primary" id="repAI">${repNarr[repType+S.month]?"Rewrite":"Write"} the summary with Claude</button>`:""}${S.downloads?`<button class="btn" id="repDl">Download report</button><button class="btn" id="csvDl">Download data as CSV</button>`:""}<span id="repStatus" class="small muted"></span></div>
+  <article class="report" id="report">${reportHtml(repType,S.month)}</article>`;
+},after(){
+  document.querySelectorAll("#repTabs [data-tab]").forEach(b=>b.onclick=()=>{repType=b.dataset.tab;render(false)});
+  const ai=$("#repAI");if(ai)ai.onclick=async()=>{const key=repType+S.month;ai.disabled=true;$("#repStatus").textContent="Claude is writing the summary…";
+    try{const plain=$("#report").innerText.slice(0,20000);const{text}=await S.sample(`You are writing the summary section of a hospital infection prevention report for the infection control committee in an Indian hospital (NABH context). Using only the data below, write 2 short paragraphs in plain clinical English: what changed, what needs action, and who should act. Do not invent numbers. No headings, no bullet points, no markdown.\n\nREPORT DATA:\n${plain}`,{cache:false,onText:({text})=>{$("#repStatus").textContent="Writing… "+text.length+" characters"}});repNarr[key]=text.trim();render(false)}
+    catch(e){$("#repStatus").textContent=sampleErr(e);ai.disabled=false}};
+  const dl=$("#repDl");if(dl)dl.onclick=async()=>{const title=REPORTS.find(r=>r[0]===repType)[1];const doc=`<!doctype html><html><head><meta charset="utf-8"><title>${title} ${mLabel(S.month)}</title><style>body{font-family:Georgia,serif;max-width:860px;margin:40px auto;padding:0 20px;color:#152429;line-height:1.5}h1{font-size:26px}h2{font-size:18px;margin-top:26px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid #ccd;padding:6px 8px;text-align:left}td.num,th.num{text-align:right}.muted{color:#667}.cell-bad{color:#B4372A;font-weight:bold}</style></head><body>${$("#report").innerHTML}</body></html>`;
+    try{await S.downloads.save({filename:`${repType}-report-${S.month}.html`,data:doc});}catch(e){if(e?.code!=="cancelled"&&e?.code!=="declined")toast("Download didn’t start.")}};
+  const cd=$("#csvDl");if(cd)cd.onclick=async()=>{const rows=[["month","ward","patient_days","catheter_days","line_days","ventilator_days","cauti","clabsi","vap","procedures","ssi","nsi","hh_opportunities","hh_compliant",...ORGS.map(o=>o.toLowerCase()),"rx_reviewed","rx_appropriate"]];
+    months().forEach(m=>{const a=agg(m);wardIds().forEach(w=>{const x=a.wards[w];rows.push([m,wardName(w),x.patientDays,x.ucDays,x.clDays,x.ventDays,x.cauti,x.clabsi,x.vap,x.procedures,x.ssi,x.nsi,x.hhOpp,x.hhCompliant,...ORGS.map(o=>x.mdro[o]||0),x.rxReviewed,x.rxAppropriate])})});
+    try{await S.downloads.save({filename:"ipc-surveillance-data.csv",data:rows.map(r=>r.map(v=>/[",]/.test(String(v))?`"${String(v).replace(/"/g,'""')}"`:v).join(",")).join("\n")})}catch(e){}};
+}};
+/* ---------- accreditation ---------- */
+let accTab="evidence";
+function evidenceStatus(it){
+  const l3=months().filter(x=>x<=S.month).slice(-3);
+  const chk=(fn,label)=>{const miss=[];l3.forEach(m=>{const r=fn(agg(m));if(r!==true)miss.push(mLabel(m)+(r?": "+r:""))});return miss.length?{ok:false,note:`Missing for ${miss.join("; ")}`}:{ok:true,note:`${label}, ${mLabel(l3[0])} to ${mLabel(l3[l3.length-1])}`}};
+  switch(it.id){
+    case"hh-data":return chk(a=>{const m=wardIds().filter(w=>a.wards[w].hhOpp===0).map(wardName);return m.length?m.join(", "):true},"Generated from ward audits");
+    case"hai-data":return chk(a=>a.total.ucDays&&a.total.clDays?true:"no device-days",`Generated from census and case records`);
+    case"ssi-data":return chk(a=>a.total.procedures?true:"no procedures","Generated from OT counts and SSI cases");
+    case"env-data":return chk(a=>["air","water","surface"].every(e=>a.env[e]?.tested)?true:"incomplete sampling","Generated from sample results");
+    case"ams-data":{const r=chk(a=>Object.keys(a.abx).length&&a.total.rxReviewed?true:"no consumption or audit data","Generated from pharmacy and audit data");if(r.ok&&!S.content.antibiogram)return{ok:false,note:"Antibiogram not loaded"};return r}
+    case"nsi-data":return{ok:true,note:"Generated from injury reports"};
+    case"capa":{const od=S.actions.filter(c=>c.status!=="done"&&isOverdue(c.due)).length;return od?{ok:false,note:`${od} action${od>1?"s are":" is"} overdue`}:{ok:true,note:"All actions on time"}}
+    default:return{ok:!!it.ready,note:it.ready?"Marked as filed":"Not yet marked as filed",manual:true};
+  }
+}
+PAGES.accreditation={html(){
+  let body="";
+  if(accTab==="evidence"){const items=S.content.nabh?.items||[];const st=items.map(evidenceStatus);
+    body=`<div class="panel"><div class="ph"><h2>NABH evidence for infection control</h2><p>${st.filter(s=>s.ok).length} of ${items.length} ready</p></div>${items.length?`<ul class="list">${items.map((it,i)=>`<li><div class="main"><b>${esc(it.title)}</b><div class="small muted">${esc(st[i].note)}</div></div><div class="ctrls"><span class="pill ${st[i].ok?"good":"warn"}">${st[i].ok?"Ready":"Gap"}</span>${st[i].manual&&S.canWrite?`<button class="btn small" data-ev="${esc(it.id)}">${it.ready?"Mark as not filed":"Mark as filed"}</button>`:""}${!st[i].manual?`<a class="btn small" style="text-decoration:none" href="#reports">Report</a>`:""}</div></li>`).join("")}</ul>`:`<p class="empty">No evidence checklist loaded.</p>`}</div>`}
+  else if(accTab==="audits"){const list=S.audits.slice().sort((a,b)=>(a.status==="done")-(b.status==="done")||(a.due||"").localeCompare(b.due||""));
+    body=`<div class="panel"><div class="ph"><h2>Audit calendar</h2></div><ul class="list">${list.map(u=>`<li><div class="main"><b>${esc(u.title)}</b><div class="small muted">${esc(u.frequency||"One-off")}, due ${fmtDate(u.due)}${u.doneOn?`, completed ${fmtDate(u.doneOn)}`:""}</div></div><div class="ctrls"><span class="pill ${u.status==="done"?"good":isOverdue(u.due)?"bad":daysTo(u.due)<=7?"warn":"mute"}">${u.status==="done"?"Done":isOverdue(u.due)?"Overdue":daysTo(u.due)<=7?"Due soon":"Scheduled"}</span>${u.status!=="done"&&S.canWrite?`<button class="btn small" data-aud="${u.id}">Mark done</button>`:""}</div></li>`).join("")||`<li class="muted">No audits scheduled.</li>`}</ul>
+    ${S.canWrite?`<form class="entry" id="audAdd" style="margin-top:14px"><label>Audit<input name="title" required></label><label>Due date<input name="due" type="date" required></label><label>Repeats<select name="frequency"><option>Monthly</option><option>Quarterly</option><option>Annual</option><option>One-off</option></select></label><div class="actions"><button class="btn primary">Schedule audit</button></div></form>`:""}</div>`}
+  else if(accTab==="policies"){const list=S.policies.slice().sort((a,b)=>policyDue(a).localeCompare(policyDue(b)));
+    body=`<div class="panel"><div class="ph"><h2>Policies and SOPs</h2><p>Review reminders</p></div><div class="tablewrap"><table><thead><tr><th>Document</th><th>Last reviewed</th><th>Next review</th><th>Status</th><th></th></tr></thead><tbody>${list.map(p=>{const d=policyDue(p),od=isOverdue(d);return `<tr><td>${esc(p.title)}</td><td>${fmtDate(p.lastReviewed)}</td><td>${fmtDate(d)}</td><td><span class="pill ${od?"bad":daysTo(d)<=30?"warn":"good"}">${od?"Overdue":daysTo(d)<=30?"Due within a month":"Current"}</span></td><td>${S.canWrite?`<button class="btn small" data-pol="${p.id}">Mark reviewed today</button>`:""}</td></tr>`}).join("")}</tbody></table></div>
+    ${S.canWrite?`<form class="entry" id="polAdd" style="margin-top:14px"><label>Document title<input name="title" required></label><label>Last reviewed<input name="lastReviewed" type="date" required></label><label>Review every (months)<input name="everyMonths" type="number" min="1" value="12" required></label><div class="actions"><button class="btn primary">Add document</button></div></form>`:""}</div>`}
+  else{const list=S.actions.slice().sort((a,b)=>(a.status==="done")-(b.status==="done")||(a.due||"").localeCompare(b.due||""));
+    body=`<div class="panel"><div class="ph"><h2>Corrective actions</h2><button class="btn small primary" id="newAct">Add corrective action</button></div><ul class="list">${list.map(c=>`<li><div class="main"><b>${esc(c.title)}</b><div class="small muted">${c.ward?esc(wardName(c.ward))+", ":""}${esc(c.owner||"Unassigned")}, due ${fmtDate(c.due)}${c.source?`. Triggered by ${esc(c.source)}`:""}</div></div><div class="ctrls"><span class="pill ${c.status==="done"?"good":isOverdue(c.due)?"bad":"mute"}">${c.status==="done"?"Closed":isOverdue(c.due)?"Overdue":"Open"}</span>${c.status!=="done"&&S.canWrite?`<button class="btn small" data-act="${c.id}">Close</button>`:""}</div></li>`).join("")||`<li class="muted">No corrective actions yet.</li>`}</ul></div>`}
+  return topbar("Accreditation support","Evidence, audits, document reviews and corrective actions in one place.")+tabs([["evidence","NABH evidence"],["audits","Audit calendar"],["policies","Policies and SOPs"],["actions","Corrective actions"]],accTab,"accTabs")+body;
+},after(){
+  document.querySelectorAll("#accTabs [data-tab]").forEach(b=>b.onclick=()=>{accTab=b.dataset.tab;render(false)});
+  document.querySelectorAll("[data-ev]").forEach(b=>b.onclick=async()=>{const items=(S.content.nabh.items||[]).map(i=>i.id===b.dataset.ev?{...i,ready:!i.ready}:i);try{await S.db.doc("content/nabh").update({items})}catch(e){writeErr(e)}});
+  document.querySelectorAll("[data-aud]").forEach(b=>b.onclick=async()=>{const u=S.audits.find(x=>x.id===b.dataset.aud);try{await S.db.collection("audits").doc(u.id).update({status:"done",doneOn:today()});const add={Monthly:1,Quarterly:3,Annual:12}[u.frequency];if(add){const d=new Date(u.due+"T00:00:00");d.setMonth(d.getMonth()+add);await S.db.collection("audits").add({title:u.title,due:d.toISOString().slice(0,10),status:"open",frequency:u.frequency});toast("Done. Next one scheduled for "+fmtDate(d.toISOString().slice(0,10)))}else toast("Audit marked done")}catch(e){writeErr(e)}});
+  document.querySelectorAll("[data-pol]").forEach(b=>b.onclick=async()=>{try{await S.db.collection("policies").doc(b.dataset.pol).update({lastReviewed:today()});toast("Review recorded")}catch(e){writeErr(e)}});
+  document.querySelectorAll("[data-act]").forEach(b=>b.onclick=async()=>{try{await S.db.collection("actions").doc(b.dataset.act).update({status:"done",closedOn:today()});toast("Action closed")}catch(e){writeErr(e)}});
+  const na=$("#newAct");if(na)na.onclick=()=>{openForm="action";location.hash="record"};
+  const fa=$("#audAdd");if(fa)fa.onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(fa));try{await S.db.collection("audits").add({...d,status:"open"});fa.reset();toast("Audit scheduled")}catch(x){writeErr(x)}};
+  const fp=$("#polAdd");if(fp)fp.onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(fp));d.everyMonths=+d.everyMonths;try{await S.db.collection("policies").add(d);fp.reset();toast("Document added")}catch(x){writeErr(x)}};
+}};
+
+/* ---------- learning ---------- */
+let openModule=null,quizOpen=false,quizMsg="";
+PAGES.learning={html(){
+  const ed=S.content.education||{modules:[],quiz:[]},t=TH(),m=S.month;
+  const byWard={};S.quiz.forEach(q=>{(byWard[q.ward]||(byWard[q.ward]=[])).push(q.score/q.total*100)});
+  const mods=ed.modules.slice().sort((a,b)=>(b.month||"").localeCompare(a.month||""));
+  return topbar("Learning","Teaching content for the wards, and a short quiz to check what has landed.")+
+  `<div class="grid2"><div class="panel"><div class="ph"><h2>Education content</h2>${S.sample&&S.canWrite?`<button class="btn small primary" id="aiEdu">Draft a teaching note from this month’s alerts</button>`:""}</div><div id="aiEduOut"></div><ul class="list">${mods.map(md=>`<li><div class="main"><b>${esc(md.title)}</b> <span class="pill info">${esc(md.cadence)}</span><div class="small muted">${mLabel(md.month)}. ${esc(md.summary)}</div>${openModule===md.id?`<p style="margin-top:8px;max-width:68ch">${esc(md.body)}</p>`:""}</div><button class="btn small" data-mod="${md.id}">${openModule===md.id?"Hide":"Read"}</button></li>`).join("")}</ul></div>
+  <div class="panel"><div class="ph"><h2>Knowledge check</h2><p>${ed.quiz.length} questions</p></div>${quizOpen?`<form id="quizForm"><label class="small" style="display:flex;flex-direction:column;gap:4px;font-weight:700;max-width:280px">Your ward<select name="ward" required>${wardOptions(null)}</select></label>${ed.quiz.map((q,i)=>`<div class="quizq"><fieldset><legend>${i+1}. ${esc(q.q)}</legend>${q.o.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}" required> ${esc(o)}</label>`).join("")}</fieldset></div>`).join("")}<div class="ctrls"><button class="btn primary">Submit answers</button><button class="btn" type="button" id="quizCancel">Cancel</button></div></form>`:`<p class="muted" style="margin-bottom:12px">Five questions on this month’s topics. Scores are grouped by ward, never by person.</p><button class="btn primary" id="quizStart" ${S.canWrite?"":"disabled"}>Take the quiz</button><div id="quizResult">${quizMsg}</div>`}</div></div>
+  <div class="panel" style="margin-top:18px"><div class="ph"><h2>What the scores suggest</h2><p>Quiz scores alongside hand hygiene, ${mLabel(m)}</p></div><div class="tablewrap"><table><thead><tr><th>Ward</th><th class="num">Quiz attempts</th><th class="num">Average score</th><th class="num">Hand hygiene</th><th>Suggestion</th></tr></thead><tbody>${wardIds().map(w=>{const sc=byWard[w]||[];const avg=sc.length?sc.reduce((s,v)=>s+v,0)/sc.length:null;const x=agg(m).wards[w];const hh=x.hhOpp?met(x).hh:null;
+    let sug="";if(!sc.length)sug="Ask staff to take the quiz";else if(avg<70&&hh!=null&&hh<t.hhTarget)sug="Knowledge and practice both low. Start bedside teaching.";else if(avg>=70&&hh!=null&&hh<t.hhTarget)sug="Staff know the rules but don’t follow them. Look at dispenser access and workload.";else if(avg<70)sug="Refresh the theory at the next huddle.";else sug="Keep the current routine.";
+    return `<tr><td>${esc(wardName(w))}</td><td class="num">${sc.length}</td><td class="num ${avg!=null?"cell-"+sev(avg,70,false):""}">${avg!=null?r0(avg)+"%":"–"}</td><td class="num">${hh!=null?r0(hh)+"%":"Not audited"}</td><td style="white-space:normal">${sug}</td></tr>`}).join("")}</tbody></table></div></div>`;
+},after(){
+  document.querySelectorAll("[data-mod]").forEach(b=>b.onclick=()=>{openModule=openModule===b.dataset.mod?null:b.dataset.mod;render(false)});
+  const qs=$("#quizStart");if(qs)qs.onclick=()=>{quizOpen=true;quizMsg="";render(false)};
+  const qc=$("#quizCancel");if(qc)qc.onclick=()=>{quizOpen=false;render(false)};
+  const qf=$("#quizForm");if(qf)qf.onsubmit=async e=>{e.preventDefault();const ed=S.content.education;const d=Object.fromEntries(new FormData(qf));const score=ed.quiz.reduce((s,q,i)=>s+(+d["q"+i]===q.a?1:0),0);
+    try{await S.db.collection("quiz").add({ward:d.ward,score,total:ed.quiz.length,month:today().slice(0,7),date:today()});quizOpen=false;quizMsg=`<p style="margin-top:12px"><b>You scored ${score} of ${ed.quiz.length}.</b></p><ul class="small">${ed.quiz.map((q,i)=>+d["q"+i]===q.a?"":`<li>${esc(q.q)} Answer: ${esc(q.o[q.a])}</li>`).join("")}</ul>`;render(false)}catch(x){writeErr(x)}};
+  const ae=$("#aiEdu");if(ae)ae.onclick=()=>askClaude(ae,$("#aiEduOut"),`Write a short teaching note (about 150 words) for nurses and doctors in an Indian hospital, to be read at a ward huddle. Base it on these infection control alerts from ${mLabel(S.month)}:\n${alerts(S.month).filter(a=>a.sev!=="info").slice(0,6).map(a=>"- "+a.title+": "+a.detail).join("\n")}\n\nStart with a title line. Then plain sentences: why it matters and three concrete things to do on the next shift. No markdown symbols.`,async text=>{const lines=text.trim().split("\n").filter(Boolean);const title=lines.shift().replace(/^title:\s*/i,"").slice(0,120);
+      return `<div class="ctrls" style="margin-top:8px"><button class="btn small primary" id="eduSave">Add to education content</button></div>`;},text=>{const b=$("#eduSave");if(b)b.onclick=async()=>{const lines=text.trim().split("\n").filter(Boolean);const title=lines.shift().replace(/^title:\s*/i,"").slice(0,120);const ed=S.content.education;const mods=[...ed.modules,{id:"m"+Date.now(),title,cadence:"Weekly",month:today().slice(0,7),summary:lines[0]?.slice(0,140)||"",body:lines.join(" ")}];try{await S.db.doc("content/education").update({modules:mods});toast("Added to education content");$("#aiEduOut").innerHTML=""}catch(e){writeErr(e)}}});
+}};
+
+/* ---------- thresholds ---------- */
+PAGES.thresholds={html(){const t=TH();const F=[["hhTarget","Hand hygiene target","%"],["cauti","CAUTI target","per 1,000 catheter-days"],["clabsi","CLABSI benchmark","per 1,000 line-days"],["vap","VAP target","per 1,000 ventilator-days"],["ssi","SSI target","% of procedures"],["ucDU","Catheter utilisation limit","ratio"],["clDU","Central line utilisation limit","ratio"],["ventDU","Ventilator utilisation limit","ratio"],["rxTarget","Prescriptions meeting policy","%"],["envTarget","Environmental samples within limits","%"],["mdroRise","MDRO alert when isolates reach","× the usual monthly count"],["abgMin","Minimum isolates to report an antibiogram row","isolates (CLSI M39 uses 30)"]];
+  return topbar("Thresholds and wards","Alerts, colours and the briefing all use these numbers. Set them to your hospital’s own benchmarks.")+
+  `<div class="panel"><form class="entry" id="thForm">${F.map(([k,l,u])=>`<label>${l}<input name="${k}" type="number" step="0.1" min="0" value="${t[k]}" required><span class="small muted" style="font-weight:400">${u}</span></label>`).join("")}<label>Hospital name<input name="hospital" value="${esc(S.hospital||"")}" placeholder="Demo Hospital"></label><div class="actions"><button class="btn primary" ${S.canWrite?"":"disabled"}>Save thresholds</button></div></form></div>
+  <div class="panel"><div class="ph"><h2>Wards</h2><p>${wardIds().length} under surveillance</p></div><div class="tablewrap"><table><thead><tr><th>Ward</th><th>Type</th><th class="num">Beds</th></tr></thead><tbody>${wardIds().map(w=>`<tr><td>${esc(wardName(w))}</td><td>${S.wards[w].type==="icu"?"ICU":"General ward"}</td><td class="num">${S.wards[w].beds||"–"}</td></tr>`).join("")}</tbody></table></div>${S.canWrite?`<h3 style="margin:18px 0 6px">Add a ward</h3>${wardAdder()}`:""}</div>`;
+},after(){bindWardAdder();const f=$("#thForm");if(f)f.onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));const hosp=d.hospital;delete d.hospital;for(const k in d)d[k]=+d[k];d.abgMin=Math.max(1,Math.round(d.abgMin));try{await S.db.doc("config/thresholds").set(d);await S.db.doc("config/hospital").set({name:hosp||""});toast("Thresholds saved")}catch(x){writeErr(x)}}}};
+
+/* ---------- Claude ---------- */
+function sampleErr(e){return {not_granted:"Claude wasn’t allowed to run. You can allow it from the page’s permissions.",rate_limited:"Too many requests right now. Try again in a minute.",cancelled:"Stopped.",refused:"Claude declined this request.",prompt_too_large:"Too much data to send at once."}[e?.code]||"Claude couldn’t answer just now. Try again."}
+function agendaPrompt(m){const a=agg(m),k=met(a.total);return `You are the infection control officer in an Indian hospital preparing the agenda for this month’s Infection Prevention and Control Committee (IPCC) meeting. Using only the data below, write a numbered agenda of 5 to 7 items, most urgent first. For each item give one sentence on the issue and one sentence on the decision the committee needs to make. Plain text, no markdown symbols, no invented numbers.
+
+Month: ${mLabel(m)}
+Hospital: hand hygiene ${r0(k.hh)}%, CAUTI ${r1(k.cauti)}, CLABSI ${r1(k.clabsi)}, VAP ${r1(k.vap)} per 1,000 device-days, SSI ${r1(k.ssi)}%, antibiotic use ${r1(ddd100(a))} DDD/100 patient-days, ${k.mdroTotal} MDRO isolates (CRE ${a.total.mdro.CRE||0}).
+Alerts:
+${alerts(m).slice(0,14).map(x=>"- ["+x.cat+"] "+x.title+": "+x.detail).join("\n")}
+Early warnings:
+${earlyWarnings(m).slice(0,6).map(e=>"- "+wardName(e.w)+", "+e.s.n+": "+e.why).join("\n")||"- none"}
+Open corrective actions:
+${S.actions.filter(c=>c.status!=="done").map(c=>"- "+c.title+" (owner "+c.owner+", due "+c.due+")").join("\n")||"- none"}`}
+async function askClaude(btn,out,prompt,extraHtml,bind){
+  if(!S.sample)return;btn.disabled=true;out.innerHTML=`<div class="ai-out muted">Claude is reading the data…</div>`;
+  try{const{text}=await S.sample(prompt,{cache:false,onText:({text})=>{const o=out.querySelector(".ai-out");if(o){o.classList.remove("muted");o.textContent=text}}});
+    out.innerHTML=`<div class="ai-out"></div>`;out.querySelector(".ai-out").textContent=text;if(extraHtml){out.insertAdjacentHTML("beforeend",await extraHtml(text));bind&&bind(text)}}
+  catch(e){out.innerHTML=`<p class="small" style="color:var(--bad);margin-top:8px">${esc(sampleErr(e))}</p>`}finally{btn.disabled=false}
+}
+
+/* ---------- boot ---------- */
+async function resolveNames(){if(!S.user)return;const all=[];S.entries.forEach(e=>{all.push(e.by,e.verifiedBy,e.reviewedBy);(e.history||[]).forEach(h=>all.push(h.by))});Object.values(S.alertState).forEach(a=>(a.history||[]).forEach(h=>all.push(h.by)));const ids=[...new Set(all.filter(Boolean))].filter(id=>!(id in S.names));if(!ids.length)return;try{const ps=await S.user.profiles(ids);ids.forEach(id=>S.names[id]=ps[id]?.name||"");scheduleRender()}catch{}}
+function sub(path,cb){S.db.collection(path).onSnapshot(snap=>{cb(snap.docs.map(d=>({id:d.id,...d.data()})));S.loaded.add(path);scheduleRender()},err=>{console.error(path,err);S.loaded.add(path);scheduleRender()})}
+window.addEventListener("hashchange",route);
+route();
+(async()=>{
+  const use=window.claude?.use?.bind(window.claude);
+  if(!use){S.dbChecked=true;render(false);return}
+  const [db,user,sample,downloads]=await Promise.all(["db","user","sample","downloads"].map(n=>use(n).catch(()=>null)));
+  S.dbChecked=true;S.db=db;S.user=user;S.sample=sample;S.downloads=downloads;
+  if(!db){render(false);return}
+  if(user){try{S.uid=await user.id()}catch{}try{const c=await user.can("data.write");if(c===false)S.canWrite=false}catch{}}
+  sub("monthly",l=>{S.monthly={};l.forEach(d=>S.monthly[d.id]=d)});
+  sub("wards",l=>{S.wards={};l.forEach(d=>S.wards[d.id]=d)});
+  sub("entries",l=>{S.entries=l;resolveNames()});
+  sub("actions",l=>S.actions=l);sub("ra",l=>S.ra=l);sub("audits",l=>S.audits=l);sub("policies",l=>S.policies=l);sub("quiz",l=>S.quiz=l);
+  sub("config",l=>{S.th=l.find(d=>d.id==="thresholds")||null;const h=l.find(d=>d.id==="hospital");S.hospital=h?.name||"";$("#hospName").textContent=S.hospital||"Demo Hospital"});
+  sub("content",l=>{S.content={};l.forEach(d=>S.content[d.id]=d)});
+  sub("alertState",l=>{S.alertState={};l.forEach(d=>S.alertState[d.id]=d);resolveNames()});
+  try{const mq=matchMedia("(prefers-color-scheme: dark)");mq.addEventListener("change",()=>render(false))}catch{}
+  new MutationObserver(()=>render(false)).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+})();
+</script>
+</body>
+</html>
